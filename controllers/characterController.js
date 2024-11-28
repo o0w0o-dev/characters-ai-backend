@@ -1,3 +1,5 @@
+"use strict";
+
 // TODO: remove dev data
 const characters = [
   {
