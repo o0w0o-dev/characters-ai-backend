@@ -2,11 +2,13 @@
 
 import dotenv from "dotenv";
 import express from "express";
+import morgan from "morgan";
 
 const app = express();
 dotenv.config();
 
 app.use(express.json());
+app.use(morgan(":method :url :status - :response-time ms"));
 
 const ENV = process.env;
 const port = ENV.PORT || 8000;
