@@ -11,7 +11,9 @@ const ENV = process.env;
 const port = ENV.PORT || 8000;
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.status(200).json({
+    root: true,
+  });
 });
 
 app.listen(port, () => {
