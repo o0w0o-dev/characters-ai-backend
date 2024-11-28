@@ -11,6 +11,7 @@ app.use(express.json());
 const ENV = process.env;
 const port = ENV.PORT || 8000;
 
+// TODO: remove dev data
 const characters = [
   {
     id: "1",
@@ -137,11 +138,12 @@ function deleteCharacter(req, res) {
   }
 }
 
-app.get("/api/v1/characters", getAllCharacters);
-app.get("/api/v1/characters/:id", getCharacter);
-app.post("/api/v1/characters", createCharacter);
-app.put("/api/v1/characters/:id", updateCharacter);
-app.delete("/api/v1/characters/:id", deleteCharacter);
+app.route("/api/v1/characters").get(getAllCharacters).post(createCharacter);
+app
+  .route("/api/v1/characters/:id")
+  .get(getCharacter)
+  .put(updateCharacter)
+  .delete(deleteCharacter);
 
 app.get("/", (req, res) => {
   res.status(200).json({
