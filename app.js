@@ -46,7 +46,7 @@ const characters = [
   },
 ];
 
-app.get("/api/v1/characters", (req, res) => {
+function getAllCharacters(req, res) {
   try {
     res.status(200).json({
       status: "success",
@@ -59,9 +59,9 @@ app.get("/api/v1/characters", (req, res) => {
       message: err,
     });
   }
-});
+}
 
-app.get("/api/v1/characters/:id", (req, res) => {
+function getCharacter(req, res) {
   try {
     const id = req.params.id;
     const character = characters.find((character) => character.id === id);
@@ -83,9 +83,9 @@ app.get("/api/v1/characters/:id", (req, res) => {
       message: err,
     });
   }
-});
+}
 
-app.post("/api/v1/characters", (req, res) => {
+function createCharacter(req, res) {
   try {
     res.status(201).json({
       status: "success",
@@ -97,9 +97,23 @@ app.post("/api/v1/characters", (req, res) => {
       message: err,
     });
   }
-});
+}
 
-app.delete("/api/v1/characters/:id", (req, res) => {
+function updateCharacter(req, res) {
+  try {
+    res.status(201).json({
+      status: "success",
+      data: req.body,
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "fail",
+      message: err,
+    });
+  }
+}
+
+function deleteCharacter(req, res) {
   try {
     const id = req.params.id;
     const character = characters.find((character) => character.id === id);
@@ -121,7 +135,13 @@ app.delete("/api/v1/characters/:id", (req, res) => {
       message: err,
     });
   }
-});
+}
+
+app.get("/api/v1/characters", getAllCharacters);
+app.get("/api/v1/characters/:id", getCharacter);
+app.post("/api/v1/characters", createCharacter);
+app.put("/api/v1/characters/:id", updateCharacter);
+app.delete("/api/v1/characters/:id", deleteCharacter);
 
 app.get("/", (req, res) => {
   res.status(200).json({
