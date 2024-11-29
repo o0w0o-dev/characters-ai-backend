@@ -81,7 +81,14 @@ async function updateCharacter(req, res) {
 
 async function deleteCharacter(req, res) {
   try {
-    const character = await Character.findByIdAndDelete(req.params.id);
+    const character = await Character.findByIdAndUpdate(
+      req.params.id,
+      { deleted_at: Date.now() },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     if (!character) {
       res.status(404).json({
