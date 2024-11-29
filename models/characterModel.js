@@ -46,6 +46,12 @@ const characterSchema = new mongoose.Schema({
   },
   updated_at: {
     type: Date,
+    validate: {
+      validator: function (val) {
+        return val < this.deleted_at;
+      },
+      message: "Cannot update after deleted.",
+    },
   },
   deleted_at: {
     type: Date,
