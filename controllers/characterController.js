@@ -3,7 +3,9 @@
 import { Character } from "./../models/characterModel.js";
 
 async function getAllCharacters(req, res) {
-  const characters = await Character.find();
+  let characters = await Character.find();
+  characters = characters.filter((character) => !character.deleted_at);
+
   try {
     res.status(200).json({
       status: "success",
@@ -20,7 +22,8 @@ async function getAllCharacters(req, res) {
 
 async function getCharacter(req, res) {
   try {
-    const character = await Character.findById(req.params.id);
+    let character = await Character.findById(req.params.id);
+    character = character?.deleted_at ? undefined : character;
 
     if (!character) {
       res.status(404).json({
