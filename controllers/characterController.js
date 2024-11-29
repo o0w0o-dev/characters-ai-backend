@@ -3,10 +3,10 @@
 import { Character } from "./../models/characterModel.js";
 
 async function getAllCharacters(req, res) {
-  let characters = await Character.find();
-  characters = characters.filter((character) => !character.deleted_at);
-
   try {
+    let characters = await Character.find();
+    characters = characters.filter((character) => !character.deleted_at);
+
     res.status(200).json({
       status: "success",
       results: characters.length,
@@ -45,8 +45,9 @@ async function getCharacter(req, res) {
 }
 
 async function createCharacter(req, res) {
-  const character = await Character.create(req.body);
   try {
+    const character = await Character.create(req.body);
+
     res.status(201).json({
       status: "success",
       data: character,
@@ -60,16 +61,16 @@ async function createCharacter(req, res) {
 }
 
 async function updateCharacter(req, res) {
-  const character = await Character.findByIdAndUpdate(
-    req.params.id,
-    { ...req.body, updated_at: Date.now() },
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
-
   try {
+    const character = await Character.findByIdAndUpdate(
+      req.params.id,
+      { ...req.body, updated_at: Date.now() },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
     res.status(200).json({
       status: "success",
       data: character,
