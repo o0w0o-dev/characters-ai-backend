@@ -57,10 +57,14 @@ async function createCharacter(req, res) {
 }
 
 async function updateCharacter(req, res) {
-  const character = await Character.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  const character = await Character.findByIdAndUpdate(
+    req.params.id,
+    { ...req.body, updated_at: Date.now() },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
 
   try {
     res.status(200).json({
