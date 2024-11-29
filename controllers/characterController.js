@@ -4,7 +4,7 @@ import { Character } from "./../models/characterModel.js";
 
 async function getAllCharacters(req, res) {
   try {
-    let characters = await Character.find();
+    let characters = await Character.find().sort("-updated_at -created_at");
     characters = characters.filter((character) => !character.deleted_at);
 
     res.status(200).json({
