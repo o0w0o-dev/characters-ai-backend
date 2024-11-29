@@ -52,6 +52,12 @@ const characterSchema = new mongoose.Schema({
   },
 });
 
+// remove "__v" field in return
+characterSchema.pre(/^find/, function (next) {
+  this.select("-__v");
+  next();
+});
+
 const Character = mongoose.model("Character", characterSchema);
 
 export { Character };
