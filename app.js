@@ -11,9 +11,6 @@ dotenv.config();
 app.use(express.json());
 app.use(morgan(":method :url :status - :response-time ms"));
 
-const ENV = process.env;
-const port = ENV.PORT || 8000;
-
 app.use("/api/v1/characters", characterRouter);
 
 app.get("/", (req, res) => {
@@ -22,6 +19,4 @@ app.get("/", (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+export { app };

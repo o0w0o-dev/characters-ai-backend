@@ -1,41 +1,12 @@
-// TODO: remove dev data
-const characters = [
-  {
-    id: "1",
-    name: "characterName1",
-    model: "characterModel1",
-    instructions: "characterInstructions1",
-    avatar: "characterAvatar1",
-    createAt: Date.now(),
-  },
-  {
-    id: "2",
-    name: "characterName2",
-    model: "characterModel2",
-    instructions: "characterInstructions2",
-    avatar: "characterAvatar2",
-    createAt: Date.now(),
-  },
-  {
-    id: "3",
-    name: "characterName3",
-    model: "characterModel3",
-    instructions: "characterInstructions3",
-    avatar: "characterAvatar3",
-    createAt: Date.now(),
-  },
-  {
-    id: "4",
-    name: "characterName4",
-    model: "characterModel4",
-    instructions: "characterInstructions4",
-    avatar: "characterAvatar4",
-    createAt: Date.now(),
-  },
-];
+"use strict";
 
-function getAllCharacters(req, res) {
+import { Character } from "./../models/characterModel.js";
+
+async function getAllCharacters(req, res) {
   try {
+    let characters = await Character.find().sort("-updated_at -created_at");
+    characters = characters.filter((character) => !character.deleted_at);
+
     res.status(200).json({
       status: "success",
       results: characters.length,
@@ -49,10 +20,10 @@ function getAllCharacters(req, res) {
   }
 }
 
-function getCharacter(req, res) {
+async function getCharacter(req, res) {
   try {
-    const id = req.params.id;
-    const character = characters.find((character) => character.id === id);
+    let character = await Character.findById(req.params.id);
+    character = character?.deleted_at ? undefined : character;
 
     if (!character) {
       res.status(404).json({
@@ -73,11 +44,13 @@ function getCharacter(req, res) {
   }
 }
 
-function createCharacter(req, res) {
+async function createCharacter(req, res) {
   try {
+    const character = await Character.create(req.body);
+
     res.status(201).json({
       status: "success",
-      data: req.body,
+      data: character,
     });
   } catch (err) {
     res.status(404).json({
@@ -87,11 +60,20 @@ function createCharacter(req, res) {
   }
 }
 
-function updateCharacter(req, res) {
+async function updateCharacter(req, res) {
   try {
-    res.status(201).json({
+    const character = await Character.findByIdAndUpdate(
+      req.params.id,
+      { ...req.body, updated_at: Date.now() },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    res.status(200).json({
       status: "success",
-      data: req.body,
+      data: character,
     });
   } catch (err) {
     res.status(404).json({
@@ -101,10 +83,16 @@ function updateCharacter(req, res) {
   }
 }
 
-function deleteCharacter(req, res) {
+async function deleteCharacter(req, res) {
   try {
-    const id = req.params.id;
-    const character = characters.find((character) => character.id === id);
+    const character = await Character.findByIdAndUpdate(
+      req.params.id,
+      { deleted_at: Date.now() },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     if (!character) {
       res.status(404).json({
