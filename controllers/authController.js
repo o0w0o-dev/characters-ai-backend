@@ -78,7 +78,7 @@ const protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-const reset = catchAsync(async (req, res, next) => {
+const forgotPassword = catchAsync(async (req, res, next) => {
   const email = req.body.email;
   const user = User.findOne({ email });
 
@@ -113,4 +113,4 @@ const reset = catchAsync(async (req, res, next) => {
   }
 });
 
-export { signup, login, protect, reset };
+export { signup, login, protect, forgotPassword };
