@@ -135,4 +135,28 @@ const resetPassword = catchAsync(async (req, res, next) => {
   responseWithUser(user, 200, res);
 });
 
-export { signup, login, protect, forgotPassword, resetPassword };
+const updatePassword = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+  const isCorrect = await user.correctPassword(
+    req.body.password,
+    user.password
+  );
+
+  if (!isCorrect)
+    return next(new AppError("Your current password is wrong.", 401));
+
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save();
+
+  responseWithUser(user, 200, res);
+});
+
+export {
+  signup,
+  login,
+  protect,
+  forgotPassword,
+  resetPassword,
+  updatePassword,
+};
