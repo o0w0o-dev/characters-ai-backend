@@ -22,7 +22,7 @@ const limiter = rateLimit({
 
 app.use("*", limiter)
 
-app.use(express.json());
+app.use(express.json({ limit: '10kb' }))
 app.use(morgan(":method :url :status - :response-time ms"));
 
 app.use("/api/v1/characters", characterRouter);
