@@ -1,8 +1,9 @@
 "use strict";
 
+import { catchAsync } from "../utils/catchAsync.js";
 import { Character } from "./../models/characterModel.js";
 
-async function getAllCharacters(req, res) {
+const getAllCharacters = catchAsync(async (req, res) => {
   try {
     let characters = await Character.find().sort("-updated_at -created_at");
     characters = characters.filter((character) => !character.deleted_at);
@@ -18,9 +19,9 @@ async function getAllCharacters(req, res) {
       message: err,
     });
   }
-}
+});
 
-async function getCharacter(req, res) {
+const getCharacter = catchAsync(async (req, res) => {
   try {
     let character = await Character.findById(req.params.id);
     character = character?.deleted_at ? undefined : character;
@@ -42,9 +43,9 @@ async function getCharacter(req, res) {
       message: err,
     });
   }
-}
+});
 
-async function createCharacter(req, res) {
+const createCharacter = catchAsync(async (req, res) => {
   try {
     const character = await Character.create(req.body);
 
@@ -58,9 +59,9 @@ async function createCharacter(req, res) {
       message: err,
     });
   }
-}
+});
 
-async function updateCharacter(req, res) {
+const updateCharacter = catchAsync(async (req, res) => {
   try {
     const character = await Character.findByIdAndUpdate(
       req.params.id,
@@ -81,9 +82,9 @@ async function updateCharacter(req, res) {
       message: err,
     });
   }
-}
+});
 
-async function deleteCharacter(req, res) {
+const deleteCharacter = catchAsync(async (req, res) => {
   try {
     const character = await Character.findByIdAndUpdate(
       req.params.id,
@@ -111,7 +112,7 @@ async function deleteCharacter(req, res) {
       message: err,
     });
   }
-}
+});
 
 export {
   getAllCharacters,

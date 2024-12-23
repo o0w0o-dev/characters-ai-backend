@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import express from "express";
 import morgan from "morgan";
 import { router as characterRouter } from "./routes/characterRoutes.js";
-import globalErrorHandler from "./controllers/errorController.js";
+import { globalErrorHandler } from "./controllers/errorController.js";
 
 const app = express();
 dotenv.config();
