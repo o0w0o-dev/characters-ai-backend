@@ -2,14 +2,17 @@
 
 import dotenv from "dotenv";
 import express from "express";
-import rateLimit from express-rate-limit
+import helmet from "helmet"
 import morgan from "morgan";
+import rateLimit from express-rate-limit
 import { router as characterRouter } from "./routes/characterRoutes.js";
 import { router as userRouter } from "./routes/userRoutes.js";
 import { globalErrorHandler } from "./controllers/errorController.js";
 
 const app = express();
 dotenv.config();
+
+app.use(helmet())
 
 const limiter = rateLimit({
 	max: process.env.RATE_LIMIT * 1,
