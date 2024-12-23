@@ -74,7 +74,8 @@ userSchema.methods.createPasswordResetToken = function () {
     .update(resetToken)
     .digest("hex");
 
-  this.passwordResetExpires = Date.now() + 10 * 60 * 1000; // TODO: remove hardcoded
+  this.passwordResetExpires =
+    Date.now() + process.env.RESET_TOKEN_EXPIRES_IN * 60 * 1000;
 
   return resetToken;
 };
