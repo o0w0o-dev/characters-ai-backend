@@ -3,6 +3,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import helmet from "helmet"
+import mongoSanitize from "mongoSanitize"
 import morgan from "morgan";
 import rateLimit from express-rate-limit
 import { router as characterRouter } from "./routes/characterRoutes.js";
@@ -21,6 +22,7 @@ const limiter = rateLimit({
 })
 
 app.use("*", limiter)
+app.use(mongoSanitize())
 
 app.use(express.json({ limit: '10kb' }))
 app.use(morgan(":method :url :status - :response-time ms"));
