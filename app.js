@@ -19,4 +19,11 @@ app.get("/", (req, res) => {
   });
 });
 
+app.all("*", (req, res) => {
+  res.status(404).json({
+    status: "fail",
+    message: `Cannot find ${req.originalUrl} on this server.`,
+  });
+});
+
 export { app };
