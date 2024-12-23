@@ -1,117 +1,82 @@
 "use strict";
 
+import { AppError } from "../utils/appError.js";
+import { catchAsync } from "../utils/catchAsync.js";
 import { Character } from "./../models/characterModel.js";
 
-async function getAllCharacters(req, res) {
-  try {
-    let characters = await Character.find().sort("-updated_at -created_at");
-    characters = characters.filter((character) => !character.deleted_at);
+const getAllCharacters = catchAsync(async (req, res) => {
+  let characters = await Character.find().sort("-updated_at -created_at");
+  characters = characters.filter((character) => !character.deleted_at);
 
-    res.status(200).json({
-      status: "success",
-      results: characters.length,
-      data: { characters },
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err,
-    });
+  res.status(200).json({
+    status: "success",
+    results: characters.length,
+    data: { characters },
+  });
+});
+
+const getCharacter = catchAsync(async (req, res) => {
+  let character = await Character.findById(req.params.id);
+  character = character?.deleted_at ? undefined : character;
+
+  if (!character) {
+    return next(new AppError("Invalid ID", 404));
   }
-}
 
-async function getCharacter(req, res) {
-  try {
-    let character = await Character.findById(req.params.id);
-    character = character?.deleted_at ? undefined : character;
+  res.status(200).json({
+    status: "success",
+    data: { character },
+  });
+});
 
-    if (!character) {
-      res.status(404).json({
-        status: "fail",
-        message: "Invalid ID",
-      });
-    } else {
-      res.status(200).json({
-        status: "success",
-        data: { character },
-      });
+const createCharacter = catchAsync(async (req, res) => {
+  const character = await Character.create(req.body);
+
+  res.status(201).json({
+    status: "success",
+    data: character,
+  });
+});
+
+const updateCharacter = catchAsync(async (req, res) => {
+  const character = await Character.findByIdAndUpdate(
+    req.params.id,
+    { ...req.body, updated_at: Date.now() },
+    {
+      new: true,
+      runValidators: true,
     }
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err,
-    });
+  );
+
+  if (!character) {
+    return next(new AppError("Invalid ID", 404));
   }
-}
 
-async function createCharacter(req, res) {
-  try {
-    const character = await Character.create(req.body);
+  res.status(200).json({
+    status: "success",
+    data: character,
+  });
+});
 
-    res.status(201).json({
-      status: "success",
-      data: character,
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err,
-    });
-  }
-}
-
-async function updateCharacter(req, res) {
-  try {
-    const character = await Character.findByIdAndUpdate(
-      req.params.id,
-      { ...req.body, updated_at: Date.now() },
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
-
-    res.status(200).json({
-      status: "success",
-      data: character,
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err,
-    });
-  }
-}
-
-async function deleteCharacter(req, res) {
-  try {
-    const character = await Character.findByIdAndUpdate(
-      req.params.id,
-      { deleted_at: Date.now() },
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
-
-    if (!character) {
-      res.status(404).json({
-        status: "fail",
-        message: "Invalid ID",
-      });
-    } else {
-      res.status(204).json({
-        status: "success",
-        data: null,
-      });
+const deleteCharacter = catchAsync(async (req, res) => {
+  const character = await Character.findByIdAndUpdate(
+    req.params.id,
+    { deleted_at: Date.now() },
+    {
+      new: true,
+      runValidators: true,
     }
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err,
-    });
+  );
+
+  if (!character) {
+    return next(new AppError("Invalid ID", 404));
   }
-}
+
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
+});
 
 export {
   getAllCharacters,

@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import express from "express";
 import morgan from "morgan";
 import { router as characterRouter } from "./routes/characterRoutes.js";
+import { globalErrorHandler } from "./controllers/errorController.js";
 
 const app = express();
 dotenv.config();
@@ -18,5 +19,14 @@ app.get("/", (req, res) => {
     root: true,
   });
 });
+
+app.all("*", (req, res) => {
+  res.status(404).json({
+    status: "fail",
+    message: `Cannot find ${req.originalUrl} on this server.`,
+  });
+});
+
+app.use(globalErrorHandler);
 
 export { app };
