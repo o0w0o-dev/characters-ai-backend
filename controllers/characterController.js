@@ -1,5 +1,6 @@
 "use strict";
 
+import AppError from "../utils/appError.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { Character } from "./../models/characterModel.js";
 
@@ -19,16 +20,13 @@ const getCharacter = catchAsync(async (req, res) => {
   character = character?.deleted_at ? undefined : character;
 
   if (!character) {
-    res.status(404).json({
-      status: "fail",
-      message: "Invalid ID",
-    });
-  } else {
-    res.status(200).json({
-      status: "success",
-      data: { character },
-    });
+    return next(new AppError("Invalid ID", 404));
   }
+
+  res.status(200).json({
+    status: "success",
+    data: { character },
+  });
 });
 
 const createCharacter = catchAsync(async (req, res) => {
@@ -50,6 +48,10 @@ const updateCharacter = catchAsync(async (req, res) => {
     }
   );
 
+  if (!character) {
+    return next(new AppError("Invalid ID", 404));
+  }
+
   res.status(200).json({
     status: "success",
     data: character,
@@ -67,16 +69,13 @@ const deleteCharacter = catchAsync(async (req, res) => {
   );
 
   if (!character) {
-    res.status(404).json({
-      status: "fail",
-      message: "Invalid ID",
-    });
-  } else {
-    res.status(204).json({
-      status: "success",
-      data: null,
-    });
+    return next(new AppError("Invalid ID", 404));
   }
+
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
 });
 
 export {
