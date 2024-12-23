@@ -1,6 +1,6 @@
 "use strict";
 
-import AppError from "../utils/appError.js";
+import { AppError } from "../utils/appError.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { Character } from "./../models/characterModel.js";
 
