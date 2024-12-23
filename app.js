@@ -6,6 +6,7 @@ import helmet from "helmet"
 import mongoSanitize from "mongoSanitize"
 import morgan from "morgan";
 import rateLimit from express-rate-limit
+import xss from xss-clean
 import { router as characterRouter } from "./routes/characterRoutes.js";
 import { router as userRouter } from "./routes/userRoutes.js";
 import { globalErrorHandler } from "./controllers/errorController.js";
@@ -23,6 +24,7 @@ const limiter = rateLimit({
 
 app.use("*", limiter)
 app.use(mongoSanitize())
+app.use(xss())
 
 app.use(express.json({ limit: '10kb' }))
 app.use(morgan(":method :url :status - :response-time ms"));
