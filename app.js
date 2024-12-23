@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import express from "express";
 import morgan from "morgan";
 import { router as characterRouter } from "./routes/characterRoutes.js";
+import { router as userRouter } from "./routes/userRoutes.js";
 import { globalErrorHandler } from "./controllers/errorController.js";
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(morgan(":method :url :status - :response-time ms"));
 
 app.use("/api/v1/characters", characterRouter);
+app.use("/api/v1/users", userRouter);
 
 app.get("/", (req, res) => {
   res.status(200).json({
