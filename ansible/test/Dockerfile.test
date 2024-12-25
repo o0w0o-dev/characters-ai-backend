@@ -1,0 +1,41 @@
+# syntax=docker/dockerfile:1
+
+# Use a specific version of the playwright image to ensure reproducibility
+# FROM mcr.microsoft.com/playwright:v1.30.0-jammy as build
+FROM mcr.microsoft.com/playwright:v1.49.1-noble as build
+
+# Set the working directory in the image
+WORKDIR /app
+
+# Copy package.json and package-lock.json (if available) to leverage Docker cache
+COPY package*.json ./
+
+# Install dependencies in a single RUN to reduce layers
+RUN apt-get update && \
+    apt-get install -y pkg-config libcairo2-dev libpango1.0-dev libpng-dev libjpeg-dev libgif-dev && \
+    npm install && \
+    # npm install --arch=arm64 --platform=linuxmusl sharp && \
+    apt-get clean && \
+    # npm rebuild canvas --update-binary \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy the rest of your project files into the Docker image
+COPY . .
+
+# Install Playwright and its browsers
+RUN npm install @playwright/test && \
+    npx playwright install --with-deps
+
+# Use a specific version of the node image for the runner stage
+# FROM node:16-bullseye-slim as runner
+# FROM mcr.microsoft.com/playwright:v1.30.0-jammy as runner
+FROM mcr.microsoft.com/playwright:v1.49.1-noble as runner
+
+# Copy only necessary files from the build stage to the runner stage
+COPY --from=build /app /app
+
+# Set the working directory in the runner stage
+WORKDIR /app
+
+# Use an array format for CMD to avoid the shell form
+CMD ["npx", "playwright", "test", "--workers=1"]
