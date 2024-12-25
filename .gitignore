@@ -5,3 +5,4 @@ node_modules/
 secrets.env
 docker-compose.yml
 Dockerfile
+test-results/
