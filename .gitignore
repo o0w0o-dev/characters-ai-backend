@@ -3,3 +3,5 @@ node_modules/
 .DS_Store
 .env
 secrets.env
+docker-compose.yml
+Dockerfile
