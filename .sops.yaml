@@ -1,0 +1,2 @@
+creation_rules:
+  - kms: arn:aws:kms:us-east-1:708425621425:alias/characters-development-sops-key

@@ -3,6 +3,7 @@ node_modules/
 .DS_Store
 .env
 secrets.env
+secrets.enc.env
 docker-compose.yml
 Dockerfile
 test-results/
