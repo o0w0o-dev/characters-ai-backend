@@ -28,4 +28,5 @@ jobs:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
       - name: Run Bash Script on EC2
-        run: ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST_DNS }} 'bash -s' < /home/ec2-user/apps/characters-ai-backend/deploy_local.sh dev
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST_DNS }} 'bash ${{ secrets.TARGET_DIR }}/deploy_local.sh dev'
