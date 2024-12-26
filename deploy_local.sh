@@ -31,9 +31,9 @@ fi
 export CONTAINER_NAME=$CONTAINER_NAME
 export AWS_PROFILE=characters_developer
 
-sops --decrypt --encryption-context Role:characters-development-sops-role ./ansible/$ENV/secrets.enc.env > .env
-cp ./ansible/$ENV/Dockerfile.$ENV Dockerfile
-cp ./ansible/$ENV/docker-compose.$ENV.yml docker-compose.yml
+sops --decrypt --encryption-context Role:characters-development-sops-role $LOCAL_FOLDER_PATH/ansible/$ENV/secrets.enc.env > .env
+cp $LOCAL_FOLDER_PATH/ansible/$ENV/Dockerfile.$ENV Dockerfile
+cp $LOCAL_FOLDER_PATH/ansible/$ENV/docker-compose.$ENV.yml docker-compose.yml
 
 # remove container if running
 docker rm -f ${CONTAINER_NAME} || true
