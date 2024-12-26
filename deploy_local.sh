@@ -24,7 +24,7 @@ BASE_NAME=$(basename "$LOCAL_FOLDER_PATH")
 if [ "$BASE_NAME" == ${FOLDER_NAME} ]; then
     echo "The name of current working directory is '${FOLDER_NAME}'."
 else
-    echo "The name of current working directory is not '${FOLDER_NAME}'."
+    echo "The name of current working directory is ${BASE_NAME} and not equal to '${FOLDER_NAME}'."
     exit 1
 fi
 
