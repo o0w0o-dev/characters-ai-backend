@@ -7,3 +7,4 @@ secrets.enc.env
 docker-compose.yml
 Dockerfile
 test-results/
+other/
