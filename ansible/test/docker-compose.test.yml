@@ -5,9 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: characters-ai-backend
-    ports:
-      - 8000:8000
+    container_name: characters-ai-test-backend
     restart: unless-stopped
     logging:
       driver: json-file
