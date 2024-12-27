@@ -40,7 +40,7 @@ test("signup", async () => {
   expect(response.status).toBe(200);
 
   const data = await response.json();
-  console.log({ signup1: data });
+  console.log({ signup: data });
 });
 
 // User /api/v1/users/signup
@@ -54,7 +54,7 @@ test("signup without email", async () => {
   expect(response.status).toBe(400);
 
   const data = await response.json();
-  console.log({ "signup without email": data });
+  expect(data.message).toEqual("Please provide email and password");
 });
 
 // User /api/v1/users/signup
@@ -68,7 +68,7 @@ test("signup without password", async () => {
   expect(response.status).toBe(400);
 
   const data = await response.json();
-  console.log({ "signup without password": data });
+  expect(data.message).toEqual("Please provide email and password");
 });
 
 // User /api/v1/users/signup
@@ -82,7 +82,7 @@ test("signup with invalid email", async () => {
   expect(response.status).toBe(400);
 
   const data = await response.json();
-  console.log({ "signup with invalid email": data });
+  expect(data.message).toEqual("Please provide email and password");
 });
 
 // User /api/v1/users/signup
@@ -96,7 +96,7 @@ test("signup with invalid password", async () => {
   expect(response.status).toBe(400);
 
   const data = await response.json();
-  console.log({ "signup with invalid password": data });
+  expect(data.message).toEqual("Please provide email and password");
 });
 
 // User /api/v1/users/signup
@@ -110,5 +110,5 @@ test("signup with invalid passwordConfirm", async () => {
   expect(response.status).toBe(400);
 
   const data = await response.json();
-  console.log({ "signup with invalid passwordConfirm": data });
+  expect(data.message).toEqual("Please provide email and password");
 });
