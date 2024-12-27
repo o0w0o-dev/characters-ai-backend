@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# TODO: fix env path in ec2
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 
@@ -17,6 +18,7 @@ echo "ENV: $ENV"
 FOLDER_NAME="characters-ai-backend"
 CONTAINER_NAME="characters-ai-${ENV}-backend"
 
+# TODO: fix hardcoded path
 # cd folder
 cd /home/ec2-user/apps/$FOLDER_NAME
 
