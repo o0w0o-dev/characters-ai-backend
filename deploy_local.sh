@@ -50,4 +50,4 @@ fi
 
 # Follow the logs of the container
 # Ensure that the correct container name or ID is used
-docker logs -f -t ${CONTAINER_NAME}
+# docker logs -f -t ${CONTAINER_NAME}
