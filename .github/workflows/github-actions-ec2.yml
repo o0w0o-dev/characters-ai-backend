@@ -30,4 +30,4 @@ jobs:
       - name: Run Bash Script on EC2
         #TODO: remove hardcoded path
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST_DNS }} 'bash /home/ec2-user/apps/characters-ai-backend/deploy_local.sh dev'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST_DNS }} 'bash cd /home/ec2-user/apps/characters-ai-backend && ./deploy_local.sh dev'
