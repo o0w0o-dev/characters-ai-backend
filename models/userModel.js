@@ -1,5 +1,6 @@
 "use strict";
 
+import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import mongoose from "mongoose";
 import validator from "validator";
