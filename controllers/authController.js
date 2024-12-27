@@ -31,6 +31,9 @@ function responseWithUser(user, statusCode, res) {
 
 const signup = catchAsync(async (req, res, next) => {
   const { email, password, passwordConfirm } = req.body;
+  if (!email || !password || !passwordConfirm)
+    return next(new AppError("Please provide email and password", 400));
+
   const newUser = await User.create({ email, password, passwordConfirm });
 
   responseWithUser(newUser, 201, res);
