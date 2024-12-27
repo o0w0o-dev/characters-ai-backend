@@ -1,5 +1,8 @@
 #!/bin/bash
 
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
+
 # Check if an argument was provided
 if [ $# -eq 0 ]; then
     echo "No env provided."
