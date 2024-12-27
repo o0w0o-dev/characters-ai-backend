@@ -6,6 +6,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const BASE_URL = `http://${process.env.HOST_DNS}:${process.env.PORT}`;
+const email = "user@gmail.com";
+const password = "12345678";
+const passwordConfirm = "12345678";
 
 // Wait for server started
 test.beforeEach(async () => {
@@ -30,12 +33,82 @@ test("example test", async () => {
 test("signup", async () => {
   const url = `${BASE_URL}/api/v1/users/signup`;
   const headers = { accept: "application/json" };
-  const body = {};
+  const body = { email, password, passwordConfirm };
   const method = "POST";
 
   const response = await fetch(url, { method, headers, body });
   expect(response.status).toBe(200);
 
   const data = await response.json();
-  expect(data).toEqual({ root: true });
+  console.log({ signup1: data });
+});
+
+// User /api/v1/users/signup
+test("signup without email", async () => {
+  const url = `${BASE_URL}/api/v1/users/signup`;
+  const headers = { accept: "application/json" };
+  const body = { password, passwordConfirm };
+  const method = "POST";
+
+  const response = await fetch(url, { method, headers, body });
+  expect(response.status).toBe(400);
+
+  const data = await response.json();
+  console.log({ "signup without email": data });
+});
+
+// User /api/v1/users/signup
+test("signup without password", async () => {
+  const url = `${BASE_URL}/api/v1/users/signup`;
+  const headers = { accept: "application/json" };
+  const body = { email, passwordConfirm };
+  const method = "POST";
+
+  const response = await fetch(url, { method, headers, body });
+  expect(response.status).toBe(400);
+
+  const data = await response.json();
+  console.log({ "signup without password": data });
+});
+
+// User /api/v1/users/signup
+test("signup with invalid email", async () => {
+  const url = `${BASE_URL}/api/v1/users/signup`;
+  const headers = { accept: "application/json" };
+  const body = { email: "abc", password, passwordConfirm };
+  const method = "POST";
+
+  const response = await fetch(url, { method, headers, body });
+  expect(response.status).toBe(400);
+
+  const data = await response.json();
+  console.log({ "signup with invalid email": data });
+});
+
+// User /api/v1/users/signup
+test("signup with invalid password", async () => {
+  const url = `${BASE_URL}/api/v1/users/signup`;
+  const headers = { accept: "application/json" };
+  const body = { email, password: "123", passwordConfirm: "123" };
+  const method = "POST";
+
+  const response = await fetch(url, { method, headers, body });
+  expect(response.status).toBe(400);
+
+  const data = await response.json();
+  console.log({ "signup with invalid password": data });
+});
+
+// User /api/v1/users/signup
+test("signup with invalid passwordConfirm", async () => {
+  const url = `${BASE_URL}/api/v1/users/signup`;
+  const headers = { accept: "application/json" };
+  const body = { email, password, passwordConfirm: passwordConfirm + " " };
+  const method = "POST";
+
+  const response = await fetch(url, { method, headers, body });
+  expect(response.status).toBe(400);
+
+  const data = await response.json();
+  console.log({ "signup with invalid passwordConfirm": data });
 });
