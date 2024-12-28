@@ -6,7 +6,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const BASE_URL = `http://${process.env.HOST_DNS}:${process.env.PORT}`;
-const email = "test1011@o0w0o.com";
 const password = "12345678Abc";
 const passwordConfirm = "12345678Abc";
 
@@ -23,19 +22,6 @@ test.describe.serial("resetPassword test cases", () => {
 
     const data = await response.json();
     expect(data).toEqual({ root: true });
-  });
-
-  test("init", async () => {
-    const url = `${BASE_URL}/api/v1/users/signup`;
-    const headers = { "Content-Type": "application/json" };
-    const body = JSON.stringify({ email, password, passwordConfirm });
-    const method = "POST";
-
-    const response = await fetch(url, { method, headers, body });
-    expect(response.status).toBe(201);
-
-    const data = await response.json();
-    expect(data.status).toEqual("success");
   });
 
   test("resetPassword without token", async () => {
