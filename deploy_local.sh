@@ -33,7 +33,7 @@ if [ "$BASE_NAME" == ${FOLDER_NAME} ]; then
     echo "The name of current working directory is '${FOLDER_NAME}'."
 else
     echo "The name of current working directory is ${BASE_NAME} and not equal to '${FOLDER_NAME}'."
-    # exit 1
+    exit 1
 fi
 
 export CONTAINER_NAME=$CONTAINER_NAME
