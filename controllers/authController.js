@@ -130,10 +130,14 @@ const forgotPassword = catchAsync(async (req, res, next) => {
 });
 
 const resetPassword = catchAsync(async (req, res, next) => {
-  const hashedToken = crypto
-    .createHash("sha256")
-    .update(req.params.token)
-    .digest("hex");
+  const token = req.params.token;
+  if (!token) return next(new AppError("Token is invalid or has expired", 400));
+
+  const { password, passwordConfirm } = req.body;
+  if (!password || !passwordConfirm || password !== passwordConfirm)
+    return next(new AppError("Please provide valid password", 400));
+
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
   const user = await User.findOne({
     passwordResetToken: hashedToken,
