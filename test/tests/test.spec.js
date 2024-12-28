@@ -6,9 +6,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const BASE_URL = `http://${process.env.HOST_DNS}:${process.env.PORT}`;
-const email = "user@gmail.com";
-const password = "12345678";
-const passwordConfirm = "12345678";
+const email = "test123@o0w0o.com";
+const password = "12345678Abc";
+const passwordConfirm = "12345678Abc";
 
 // Wait for server started
 test.beforeEach(async () => {
@@ -29,7 +29,6 @@ test("example test", async () => {
   expect(data).toEqual({ root: true });
 });
 
-// User /api/v1/users/signup
 test("signup", async () => {
   const url = `${BASE_URL}/api/v1/users/signup`;
   const headers = { accept: "application/json" };
@@ -37,13 +36,26 @@ test("signup", async () => {
   const method = "POST";
 
   const response = await fetch(url, { method, headers, body });
-  expect(response.status).toBe(200);
+  expect(response.status).toBe(201);
 
   const data = await response.json();
-  console.log({ signup: data });
+  expect(data.status).toEqual("success");
 });
 
-// User /api/v1/users/signup
+test("signup with empty body", async () => {
+  const url = `${BASE_URL}/api/v1/users/signup`;
+  const headers = { accept: "application/json" };
+  const body = {};
+  const method = "POST";
+
+  const response = await fetch(url, { method, headers, body });
+  expect(response.status).toBe(400);
+
+  const data = await response.json();
+  expect(data.status).toEqual("fail");
+  expect(data.message).toEqual("Please provide email and password");
+});
+
 test("signup without email", async () => {
   const url = `${BASE_URL}/api/v1/users/signup`;
   const headers = { accept: "application/json" };
@@ -54,10 +66,10 @@ test("signup without email", async () => {
   expect(response.status).toBe(400);
 
   const data = await response.json();
+  expect(data.status).toEqual("fail");
   expect(data.message).toEqual("Please provide email and password");
 });
 
-// User /api/v1/users/signup
 test("signup without password", async () => {
   const url = `${BASE_URL}/api/v1/users/signup`;
   const headers = { accept: "application/json" };
@@ -68,10 +80,10 @@ test("signup without password", async () => {
   expect(response.status).toBe(400);
 
   const data = await response.json();
+  expect(data.status).toEqual("fail");
   expect(data.message).toEqual("Please provide email and password");
 });
 
-// User /api/v1/users/signup
 test("signup with invalid email", async () => {
   const url = `${BASE_URL}/api/v1/users/signup`;
   const headers = { accept: "application/json" };
@@ -82,10 +94,46 @@ test("signup with invalid email", async () => {
   expect(response.status).toBe(400);
 
   const data = await response.json();
+  expect(data.status).toEqual("fail");
   expect(data.message).toEqual("Please provide email and password");
 });
 
-// User /api/v1/users/signup
+test("signup with invalid email2", async () => {
+  const url = `${BASE_URL}/api/v1/users/signup`;
+  const headers = { accept: "application/json" };
+  const body = {
+    email: "emailWithMoreThan60Characters1234567890123456789012@o0w0o.com",
+    password,
+    passwordConfirm,
+  };
+  const method = "POST";
+
+  const response = await fetch(url, { method, headers, body });
+  expect(response.status).toBe(400);
+
+  const data = await response.json();
+  expect(data.status).toEqual("fail");
+  expect(data.message).toEqual("Please provide email and password");
+});
+
+test("signup with invalid email3", async () => {
+  const url = `${BASE_URL}/api/v1/users/signup`;
+  const headers = { accept: "application/json" };
+  const body = {
+    email: "user@domain@o0w0o.com",
+    password,
+    passwordConfirm,
+  };
+  const method = "POST";
+
+  const response = await fetch(url, { method, headers, body });
+  expect(response.status).toBe(400);
+
+  const data = await response.json();
+  expect(data.status).toEqual("fail");
+  expect(data.message).toEqual("Please provide email and password");
+});
+
 test("signup with invalid password", async () => {
   const url = `${BASE_URL}/api/v1/users/signup`;
   const headers = { accept: "application/json" };
@@ -96,10 +144,24 @@ test("signup with invalid password", async () => {
   expect(response.status).toBe(400);
 
   const data = await response.json();
+  expect(data.status).toEqual("fail");
   expect(data.message).toEqual("Please provide email and password");
 });
 
-// User /api/v1/users/signup
+test("signup with invalid password2", async () => {
+  const url = `${BASE_URL}/api/v1/users/signup`;
+  const headers = { accept: "application/json" };
+  const body = { email, password: "12345678", passwordConfirm: "12345678" };
+  const method = "POST";
+
+  const response = await fetch(url, { method, headers, body });
+  expect(response.status).toBe(400);
+
+  const data = await response.json();
+  expect(data.status).toEqual("fail");
+  expect(data.message).toEqual("Please provide email and password");
+});
+
 test("signup with invalid passwordConfirm", async () => {
   const url = `${BASE_URL}/api/v1/users/signup`;
   const headers = { accept: "application/json" };
@@ -110,5 +172,87 @@ test("signup with invalid passwordConfirm", async () => {
   expect(response.status).toBe(400);
 
   const data = await response.json();
+  expect(data.status).toEqual("fail");
+  expect(data.message).toEqual("Please provide email and password");
+});
+
+test("signup with exist user", async () => {
+  const url = `${BASE_URL}/api/v1/users/signup`;
+  const headers = { accept: "application/json" };
+  const body = { email: "existUser@o0w0o.com", password, passwordConfirm };
+  const method = "POST";
+
+  const response = await fetch(url, { method, headers, body });
+  expect(response.status).toBe(201);
+
+  const response2 = await fetch(url, { method, headers, body });
+  expect(response.status).toBe(400);
+
+  const data = await response2.json();
+  expect(data.status).toEqual("fail");
+  expect(data.message).toEqual("The user already exists.");
+});
+
+test("signup with injection code", async () => {
+  const url = `${BASE_URL}/api/v1/users/signup`;
+  const headers = { accept: "application/json" };
+  const body = { email: "test123$@o0w0o.com", password, passwordConfirm };
+  const method = "POST";
+
+  const response = await fetch(url, { method, headers, body });
+  expect(response.status).toBe(400);
+
+  const data = await response.json();
+  expect(data.status).toEqual("fail");
+  expect(data.message).toEqual("Please provide email and password");
+});
+
+test("signup with injection code2", async () => {
+  const url = `${BASE_URL}/api/v1/users/signup`;
+  const headers = { accept: "application/json" };
+  const body = { email: "test123<h1>@o0w0o.com", password, passwordConfirm };
+  const method = "POST";
+
+  const response = await fetch(url, { method, headers, body });
+  expect(response.status).toBe(400);
+
+  const data = await response.json();
+  expect(data.status).toEqual("fail");
+  expect(data.message).toEqual("Please provide email and password");
+});
+
+test("signup with injection code3", async () => {
+  const url = `${BASE_URL}/api/v1/users/signup`;
+  const headers = { accept: "application/json" };
+  const body = {
+    email,
+    password: password + "$",
+    passwordConfirm: passwordConfirm + "$",
+  };
+  const method = "POST";
+
+  const response = await fetch(url, { method, headers, body });
+  expect(response.status).toBe(400);
+
+  const data = await response.json();
+  expect(data.status).toEqual("fail");
+  expect(data.message).toEqual("Please provide email and password");
+});
+
+test("signup with injection code4", async () => {
+  const url = `${BASE_URL}/api/v1/users/signup`;
+  const headers = { accept: "application/json" };
+  const body = {
+    email,
+    password: password + "<h1>",
+    passwordConfirm: passwordConfirm + "<h1>",
+  };
+  const method = "POST";
+
+  const response = await fetch(url, { method, headers, body });
+  expect(response.status).toBe(400);
+
+  const data = await response.json();
+  expect(data.status).toEqual("fail");
   expect(data.message).toEqual("Please provide email and password");
 });
