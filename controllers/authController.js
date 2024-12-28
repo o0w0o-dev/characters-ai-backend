@@ -156,7 +156,13 @@ const resetPassword = catchAsync(async (req, res, next) => {
 });
 
 const updatePassword = catchAsync(async (req, res, next) => {
+  const { password, passwordConfirm } = req.body;
+  if (!password || !passwordConfirm || password !== passwordConfirm)
+    return next(new AppError("Please provide valid password", 400));
+
   const user = await User.findById(req.user._id);
+  if (!user) return next(new AppError("User not found", 404));
+
   const isCorrect = await user.correctPassword(
     req.body.password,
     user.password
@@ -165,8 +171,8 @@ const updatePassword = catchAsync(async (req, res, next) => {
   if (!isCorrect)
     return next(new AppError("Your current password is wrong", 401));
 
-  user.password = req.body.password;
-  user.passwordConfirm = req.body.passwordConfirm;
+  user.password = password;
+  user.passwordConfirm = passwordConfirm;
   await user.save();
 
   responseWithUser(user, 200, res);
