@@ -211,7 +211,7 @@ test.describe.serial("signup test cases", () => {
 
     const data = await response.json();
     expect(data.status).toEqual("fail");
-    expect(data.message).toEqual("The user already exists.");
+    expect(data.message).toEqual("The user already exists");
   });
 
   test("signup with exist user", async () => {
@@ -232,7 +232,7 @@ test.describe.serial("signup test cases", () => {
 
     const data = await response2.json();
     expect(data.status).toEqual("fail");
-    expect(data.message).toEqual("The user already exists.");
+    expect(data.message).toEqual("The user already exists");
   });
 
   test("signup with injection code", async () => {

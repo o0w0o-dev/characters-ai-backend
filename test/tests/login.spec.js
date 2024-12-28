@@ -62,6 +62,7 @@ test.describe.serial("login test cases", () => {
 
     const data = await response.json();
     expect(data.status).toEqual("fail");
+    expect(data.message).toEqual("Please provide email and password");
   });
 
   test("login without email", async () => {
