@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
         return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]+$/.test(el);
       },
       message:
-        "The password contain at least 1 character of each: a-z, A-Z, 0-9.",
+        "The password contain at least 1 character of each: a-z, A-Z, 0-9",
     },
   },
   passwordConfirm: {
@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema({
       validator: function (el) {
         return el === this.password;
       },
-      message: "Passwords are not the same!",
+      message: "Passwords are not the same",
     },
   },
   passwordChangedAt: Date,
