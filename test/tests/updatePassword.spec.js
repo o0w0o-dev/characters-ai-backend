@@ -9,6 +9,7 @@ const BASE_URL = `http://${process.env.HOST_DNS}:${process.env.PORT}`;
 const password = "12345678Abc";
 const passwordConfirm = "12345678Abc";
 
+// TODO: test manually
 test.describe.serial("updatePassword test cases", () => {
   test("example test", async () => {
     const url = BASE_URL;
