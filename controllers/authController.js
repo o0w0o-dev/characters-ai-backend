@@ -3,6 +3,7 @@
 import jwt from "jsonwebtoken";
 import { AppError } from "../utils/appError.js";
 import { catchAsync } from "../utils/catchAsync.js";
+import { sendEmail } from "./../utils/email.js";
 import { User } from "./../models/userModel.js";
 
 function responseWithUser(user, statusCode, res) {
@@ -36,7 +37,7 @@ const signup = catchAsync(async (req, res, next) => {
     return next(new AppError("Please provide email and password", 400));
 
   const isExist = !!(await User.findOne({ email }));
-  if (isExist) return next(new AppError("The user already exists.", 400));
+  if (isExist) return next(new AppError("The user already exists", 400));
 
   const newUser = await User.create({ email, password, passwordConfirm });
 
@@ -70,7 +71,7 @@ const protect = catchAsync(async (req, res, next) => {
 
   if (!token)
     return next(
-      new AppError("You are not logged in! Please log in to get access.", 401)
+      new AppError("You are not logged in! Please log in to get access", 401)
     );
 
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
@@ -79,15 +80,12 @@ const protect = catchAsync(async (req, res, next) => {
 
   if (!freshUser)
     return next(
-      new AppError(
-        "The user belonging to this token does no longer exist.",
-        401
-      )
+      new AppError("The user belonging to this token does no longer exist", 401)
     );
 
   if (freshUser.changedPasswordAfter(decoded.iat)) {
     return next(
-      new AppError("User recently changed password! Please log in again.", 401)
+      new AppError("User recently changed password! Please log in again", 401)
     );
   }
 
@@ -97,11 +95,13 @@ const protect = catchAsync(async (req, res, next) => {
 });
 
 const forgotPassword = catchAsync(async (req, res, next) => {
-  const email = req.body.email;
-  const user = User.findOne({ email });
+  const email = req.body.email?.toLowerCase();
+  if (!email)
+    return next(new AppError("There is no user with email address", 404));
 
+  const user = await User.findOne({ email });
   if (!user)
-    return next(new AppError("There is no user with email address.", 404));
+    return next(new AppError("There is no user with email address", 404));
 
   const resetToken = user.createPasswordResetToken();
   await user.save({ validateBeforeSave: false });
@@ -116,17 +116,15 @@ const forgotPassword = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
       status: "success",
-      message: "Token sent to email!",
+      message: "Token sent to email",
     });
   } catch (err) {
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
+    console.log({ sendEmail: err });
 
     return next(
-      new AppError(
-        "There was an error sending the email. Try again later!",
-        500
-      )
+      new AppError("There was an error sending the email. Try again later", 500)
     );
   }
 });
@@ -142,7 +140,7 @@ const resetPassword = catchAsync(async (req, res, next) => {
     passwordResetExpires: { $gt: Date.now() },
   });
 
-  if (!user) return next(new AppError("Token is invalid or has expired.", 400));
+  if (!user) return next(new AppError("Token is invalid or has expired", 400));
 
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
@@ -161,7 +159,7 @@ const updatePassword = catchAsync(async (req, res, next) => {
   );
 
   if (!isCorrect)
-    return next(new AppError("Your current password is wrong.", 401));
+    return next(new AppError("Your current password is wrong", 401));
 
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
