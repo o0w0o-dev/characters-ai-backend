@@ -10,7 +10,7 @@ const email = "test789@o0w0o.com";
 const password = "12345678Abc";
 const passwordConfirm = "12345678Abc";
 
-test.describe("forgotPassword test cases", () => {
+test.describe.serial("forgotPassword test cases", () => {
   test("example test", async () => {
     const url = BASE_URL;
     const headers = { "Content-Type": "application/json" };
