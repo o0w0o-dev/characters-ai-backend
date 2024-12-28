@@ -34,6 +34,9 @@ const signup = catchAsync(async (req, res, next) => {
   if (!email || !password || !passwordConfirm)
     return next(new AppError("Please provide email and password", 400));
 
+  const isExist = !!(await User.One({ email }));
+  if (isExist) return next(new AppError("The user already exists.", 400));
+
   const newUser = await User.create({ email, password, passwordConfirm });
 
   responseWithUser(newUser, 201, res);
