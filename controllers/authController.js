@@ -30,7 +30,8 @@ function responseWithUser(user, statusCode, res) {
 }
 
 const signup = catchAsync(async (req, res, next) => {
-  const { email, password, passwordConfirm } = req.body;
+  const email = req.body.email?.toLowerCase();
+  const { password, passwordConfirm } = req.body;
   if (!email || !password || !passwordConfirm)
     return next(new AppError("Please provide email and password", 400));
 
@@ -43,7 +44,8 @@ const signup = catchAsync(async (req, res, next) => {
 });
 
 const login = catchAsync(async (req, res, next) => {
-  const { email, password } = req.body;
+  const email = req.body.email?.toLowerCase();
+  const { password } = req.body;
   if (!email || !password)
     return next(new AppError("Please provide email and password", 400));
 
