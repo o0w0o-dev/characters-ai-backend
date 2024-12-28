@@ -196,6 +196,24 @@ test.describe.serial("signup test cases", () => {
     );
   });
 
+  test("signup with upperCase", async () => {
+    const url = `${BASE_URL}/api/v1/users/signup`;
+    const headers = { "Content-Type": "application/json" };
+    const body = JSON.stringify({
+      email: email.toUpperCase(),
+      password,
+      passwordConfirm,
+    });
+    const method = "POST";
+
+    const response = await fetch(url, { method, headers, body });
+    expect(response.status).toBe(400);
+
+    const data = await response.json();
+    expect(data.status).toEqual("fail");
+    expect(data.message).toEqual("The user already exists.");
+  });
+
   test("signup with exist user", async () => {
     const url = `${BASE_URL}/api/v1/users/signup`;
     const headers = { "Content-Type": "application/json" };
