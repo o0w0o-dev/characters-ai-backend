@@ -18,7 +18,6 @@ router.post("/login", login);
 router.post("/forgotPassword", forgotPassword);
 router.patch("/resetPassword/:token", resetPassword);
 router.patch("/updateMyPassword", protect, updatePassword);
-
-router.route("/:id").get(getUser);
+router.get("/:id", protect, getUser);
 
 export { router };
