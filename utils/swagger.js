@@ -1,3 +1,6 @@
+"use strict";
+
+// TODO: use swaggerJsDoc
 import swaggerUi from "swagger-ui-express";
 
 const spec = {
@@ -15,6 +18,10 @@ const spec = {
     {
       name: "users",
       description: "Operations about user",
+    },
+    {
+      name: "characters",
+      description: "Operations about characters",
     },
   ],
   paths: {
@@ -212,6 +219,133 @@ const spec = {
         },
       },
     },
+    "/characters": {
+      get: {
+        tags: ["characters"],
+        summary: "Get all characters",
+        security: [{ bearerAuth: [] }],
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+        },
+      },
+      post: {
+        tags: ["characters"],
+        summary: "Create character",
+        security: [{ bearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/createCharacter",
+              },
+            },
+            "application/xml": {
+              schema: {
+                $ref: "#/components/schemas/createCharacter",
+              },
+            },
+            "application/x-www-form-urlencoded": {
+              schema: {
+                $ref: "#/components/schemas/createCharacter",
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+        },
+      },
+    },
+    "/characters/{id}": {
+      get: {
+        tags: ["characters"],
+        summary: "Get character by ID",
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            description: "Characters ID",
+            required: true,
+            schema: {
+              type: "string",
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+        },
+      },
+      put: {
+        tags: ["characters"],
+        summary: "Update character by ID",
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            description: "Characters ID",
+            required: true,
+            schema: {
+              type: "string",
+            },
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/updateCharacter",
+              },
+            },
+            "application/xml": {
+              schema: {
+                $ref: "#/components/schemas/updateCharacter",
+              },
+            },
+            "application/x-www-form-urlencoded": {
+              schema: {
+                $ref: "#/components/schemas/updateCharacter",
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+        },
+      },
+      delete: {
+        tags: ["characters"],
+        summary: "Delete character by ID",
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            description: "Characters ID",
+            required: true,
+            schema: {
+              type: "string",
+            },
+          },
+        ],
+        responses: {
+          204: {
+            description: "Successful operation",
+          },
+        },
+      },
+    },
   },
   components: {
     schemas: {
@@ -281,6 +415,40 @@ const spec = {
           passwordConfirm: {
             type: "string",
             example: "NewStrongPassword123",
+          },
+        },
+      },
+      createCharacter: {
+        type: "object",
+        properties: {
+          name: {
+            type: "string",
+            example: "My assistant",
+          },
+          model: {
+            type: "string",
+            example: "Model_A",
+          },
+          instructions: {
+            type: "string",
+            example: "I want you act as  a helpful assistant.",
+          },
+        },
+      },
+      updateCharacter: {
+        type: "object",
+        properties: {
+          name: {
+            type: "string",
+            example: "My assistant",
+          },
+          model: {
+            type: "string",
+            example: "Model_A",
+          },
+          instructions: {
+            type: "string",
+            example: "I want you act as  a helpful assistant.",
           },
         },
       },
