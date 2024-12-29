@@ -1,6 +1,8 @@
 "use strict";
 
+import crypto from "crypto";
 import jwt from "jsonwebtoken";
+import { promisify } from "util";
 import { AppError } from "../utils/appError.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { sendEmail } from "./../utils/email.js";
@@ -156,17 +158,19 @@ const resetPassword = catchAsync(async (req, res, next) => {
 });
 
 const updatePassword = catchAsync(async (req, res, next) => {
-  const { password, passwordConfirm } = req.body;
-  if (!password || !passwordConfirm || password !== passwordConfirm)
+  const { passwordCurrent, password, passwordConfirm } = req.body;
+  if (
+    !passwordCurrent ||
+    !password ||
+    !passwordConfirm ||
+    password !== passwordConfirm
+  )
     return next(new AppError("Please provide valid password", 400));
 
   const user = await User.findById(req.user._id);
   if (!user) return next(new AppError("User not found", 404));
 
-  const isCorrect = await user.correctPassword(
-    req.body.password,
-    user.password
-  );
+  const isCorrect = await user.correctPassword(passwordCurrent, user.password);
 
   if (!isCorrect)
     return next(new AppError("Your current password is wrong", 401));
