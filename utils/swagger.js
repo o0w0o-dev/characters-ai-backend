@@ -189,6 +189,29 @@ const spec = {
         },
       },
     },
+    "/users/{id}": {
+      get: {
+        tags: ["users"],
+        summary: "Get user by ID",
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            description: "User ID",
+            required: true,
+            schema: {
+              type: "string",
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+        },
+      },
+    },
   },
   components: {
     schemas: {
