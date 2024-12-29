@@ -1,34 +1,13 @@
 "use strict";
 
+import crypto from "crypto";
 import jwt from "jsonwebtoken";
+import { promisify } from "util";
 import { AppError } from "../utils/appError.js";
 import { catchAsync } from "../utils/catchAsync.js";
+import { responseWithUser } from "../utils/responseWithUser.js";
 import { sendEmail } from "./../utils/email.js";
 import { User } from "./../models/userModel.js";
-
-function responseWithUser(user, statusCode, res) {
-  user = { id: user._id, proUser: user.proUser };
-
-  const cookieOptions = {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
-    ),
-    httpOnly: true,
-  };
-  if (process.env.NODE_ENV === "production") cookieOptions.secure = true;
-
-  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
-
-  res.cookie("jwt", token, cookieOptions);
-
-  res.status(statusCode).json({
-    status: "success",
-    token,
-    data: { user },
-  });
-}
 
 const signup = catchAsync(async (req, res, next) => {
   const email = req.body.email?.toLowerCase();
@@ -130,7 +109,7 @@ const forgotPassword = catchAsync(async (req, res, next) => {
 });
 
 const resetPassword = catchAsync(async (req, res, next) => {
-  const token = req.params.token;
+  const token = req.params?.token;
   if (!token) return next(new AppError("Token is invalid or has expired", 400));
 
   const { password, passwordConfirm } = req.body;
@@ -156,17 +135,19 @@ const resetPassword = catchAsync(async (req, res, next) => {
 });
 
 const updatePassword = catchAsync(async (req, res, next) => {
-  const { password, passwordConfirm } = req.body;
-  if (!password || !passwordConfirm || password !== passwordConfirm)
+  const { passwordCurrent, password, passwordConfirm } = req.body;
+  if (
+    !passwordCurrent ||
+    !password ||
+    !passwordConfirm ||
+    password !== passwordConfirm
+  )
     return next(new AppError("Please provide valid password", 400));
 
   const user = await User.findById(req.user._id);
   if (!user) return next(new AppError("User not found", 404));
 
-  const isCorrect = await user.correctPassword(
-    req.body.password,
-    user.password
-  );
+  const isCorrect = await user.correctPassword(passwordCurrent, user.password);
 
   if (!isCorrect)
     return next(new AppError("Your current password is wrong", 401));

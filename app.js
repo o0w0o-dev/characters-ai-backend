@@ -8,9 +8,13 @@ import mongoSanitize from "express-mongo-sanitize";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import xss from "xss-clean";
+import { globalErrorHandler } from "./controllers/errorController.js";
 import { router as characterRouter } from "./routes/characterRoutes.js";
 import { router as userRouter } from "./routes/userRoutes.js";
-import { globalErrorHandler } from "./controllers/errorController.js";
+import swaggerDocs from "./utils/swagger.js";
+
+const PORT = process.env.PORT || 8000;
+const RATE_LIMIT = process.env.RATE_LIMIT * 1 || 100;
 
 const app = express();
 dotenv.config();
@@ -18,7 +22,7 @@ dotenv.config();
 app.use(helmet());
 
 const limiter = rateLimit({
-  max: process.env.RATE_LIMIT * 1,
+  max: RATE_LIMIT,
   windowMs: 60 * 60 * 1000,
   message: "Too many requests from this IP.",
 });
@@ -31,6 +35,7 @@ app.use(hpp());
 app.use(express.json({ limit: "10kb" }));
 app.use(morgan(":method :url :status - :response-time ms"));
 
+swaggerDocs(app, PORT);
 app.use("/api/v1/characters", characterRouter);
 app.use("/api/v1/users", userRouter);
 
