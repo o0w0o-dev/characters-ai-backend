@@ -2,6 +2,7 @@
 
 import { AppError } from "../utils/appError.js";
 import { catchAsync } from "../utils/catchAsync.js";
+import { responseWithUser } from "../utils/responseWithUser.js";
 import { User } from "../models/userModel.js";
 
 const getUser = catchAsync(async (req, res) => {
@@ -11,10 +12,7 @@ const getUser = catchAsync(async (req, res) => {
     return next(new AppError("Invalid ID", 404));
   }
 
-  res.status(200).json({
-    status: "success",
-    data: { user },
-  });
+  responseWithUser(user, 200, res);
 });
 
 export { getUser };
