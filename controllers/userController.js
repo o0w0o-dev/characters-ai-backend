@@ -6,7 +6,7 @@ import { responseWithUser } from "../utils/responseWithUser.js";
 import { User } from "../models/userModel.js";
 
 const getUser = catchAsync(async (req, res) => {
-  let user = await User.findById(req.params.id);
+  let user = await User.findById(req.params?.id);
 
   if (!user) {
     return next(new AppError("Invalid ID", 404));

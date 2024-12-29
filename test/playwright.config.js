@@ -1,3 +1,5 @@
+"use strict";
+
 import { defineConfig, devices } from "@playwright/test";
 
 module.exports = defineConfig({

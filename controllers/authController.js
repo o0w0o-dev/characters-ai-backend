@@ -109,7 +109,7 @@ const forgotPassword = catchAsync(async (req, res, next) => {
 });
 
 const resetPassword = catchAsync(async (req, res, next) => {
-  const token = req.params.token;
+  const token = req.params?.token;
   if (!token) return next(new AppError("Token is invalid or has expired", 400));
 
   const { password, passwordConfirm } = req.body;
