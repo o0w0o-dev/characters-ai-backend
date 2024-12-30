@@ -3,7 +3,7 @@
 import { test, expect } from "@playwright/test";
 import {
   exampleTest,
-  createCharacter,
+  getHeadersWithToken,
   getTestResponse,
   init,
   login,
@@ -38,10 +38,7 @@ test.describe("createCharacter test cases", () => {
         model,
         instructions,
       },
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(expect, response, 201, "success");
 
@@ -54,10 +51,7 @@ test.describe("createCharacter test cases", () => {
         model,
         instructions,
       },
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(expect, response2, 400, "fail", "failMessage");
   });
@@ -68,10 +62,7 @@ test.describe("createCharacter test cases", () => {
       url,
       "POST",
       {},
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(expect, response, 400, "fail", "failMessage");
   });
@@ -85,10 +76,7 @@ test.describe("createCharacter test cases", () => {
         model,
         instructions,
       },
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(expect, response, 400, "fail", "failMessage");
   });
@@ -102,10 +90,7 @@ test.describe("createCharacter test cases", () => {
         name: testInfo.title.slice(-10),
         instructions,
       },
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(expect, response, 400, "fail", "failMessage");
   });
@@ -119,10 +104,7 @@ test.describe("createCharacter test cases", () => {
         name: testInfo.title.slice(-10),
         model,
       },
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(expect, response, 400, "fail", "failMessage");
   });
@@ -137,10 +119,7 @@ test.describe("createCharacter test cases", () => {
         model,
         instructions,
       },
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(expect, response, 400, "fail", "failMessage");
   });
@@ -155,10 +134,7 @@ test.describe("createCharacter test cases", () => {
         model: "notExistModel",
         instructions,
       },
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(expect, response, 400, "fail", "failMessage");
   });
@@ -173,10 +149,7 @@ test.describe("createCharacter test cases", () => {
         model,
         instructions: "long".repeat(250),
       },
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(expect, response, 400, "fail", "failMessage");
   });
@@ -212,10 +185,7 @@ test.describe("createCharacter test cases", () => {
         model,
         instructions,
       },
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer wrong token`,
-      }
+      getHeadersWithToken("wrong token")
     );
     await verifyResult(expect, response, 500, "error", "jwt malformed");
   });

@@ -4,6 +4,7 @@ import { test, expect } from "@playwright/test";
 import {
   exampleTest,
   createCharacter,
+  getHeadersWithToken,
   getTestResponse,
   init,
   login,
@@ -39,10 +40,7 @@ test.describe.serial("getCharacter test cases", () => {
       `http://${process.env.HOST_DNS}:${process.env.PORT}/api/v1/characters/${data2.data?.character?.id}`,
       "GET",
       undefined,
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(expect, response, 200, "success");
   });
@@ -60,10 +58,7 @@ test.describe.serial("getCharacter test cases", () => {
       `http://${process.env.HOST_DNS}:${process.env.PORT}/api/v1/characters/${wrongId}`,
       "GET",
       undefined,
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(expect, response, 404, "fail", "Invalid ID");
   });
@@ -105,10 +100,7 @@ test.describe.serial("getCharacter test cases", () => {
       `http://${process.env.HOST_DNS}:${process.env.PORT}/api/v1/characters/${data2.data?.character?.id}`,
       "GET",
       undefined,
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer wrong token`,
-      }
+      getHeadersWithToken("wrong token")
     );
     await verifyResult(expect, response, 500, "error", "jwt malformed");
   });

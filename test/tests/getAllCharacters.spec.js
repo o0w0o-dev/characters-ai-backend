@@ -3,6 +3,7 @@
 import { test, expect } from "@playwright/test";
 import {
   exampleTest,
+  getHeadersWithToken,
   getTestResponse,
   init,
   login,
@@ -27,10 +28,12 @@ test.describe.serial("getAllCharacters test cases", () => {
 
   test("getAllCharacters", async () => {
     const data = await login(email, password);
-    const response = await getTestResponse(url, "GET", undefined, {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${data.token}`,
-    });
+    const response = await getTestResponse(
+      url,
+      "GET",
+      undefined,
+      getHeadersWithToken(data.token)
+    );
     await verifyResult(expect, response, 200, "success");
   });
 
@@ -48,10 +51,12 @@ test.describe.serial("getAllCharacters test cases", () => {
   });
 
   test("getAllCharacters with wrong jwt token", async () => {
-    const response = await getTestResponse(url, "GET", undefined, {
-      "Content-Type": "application/json",
-      Authorization: `Bearer wrong token`,
-    });
+    const response = await getTestResponse(
+      url,
+      "GET",
+      undefined,
+      getHeadersWithToken("wrong token")
+    );
     await verifyResult(expect, response, 500, "error", "jwt malformed");
   });
 });

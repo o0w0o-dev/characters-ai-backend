@@ -3,6 +3,7 @@
 import { test, expect } from "@playwright/test";
 import {
   exampleTest,
+  getHeadersWithToken,
   getTestResponse,
   init,
   login,
@@ -32,10 +33,7 @@ test.describe.serial("updatePassword test cases", () => {
       url,
       "PATCH",
       { passwordCurrent, password, passwordConfirm },
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(expect, response, 200, "success");
 
@@ -44,10 +42,7 @@ test.describe.serial("updatePassword test cases", () => {
       url,
       "PATCH",
       { passwordCurrent, password, passwordConfirm },
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(
       expect,
@@ -64,10 +59,7 @@ test.describe.serial("updatePassword test cases", () => {
       url,
       "PATCH",
       { passwordCurrent: passwordCurrent + "1", password, passwordConfirm },
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(
       expect,
@@ -84,10 +76,7 @@ test.describe.serial("updatePassword test cases", () => {
       url,
       "PATCH",
       {},
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(
       expect,
@@ -107,10 +96,7 @@ test.describe.serial("updatePassword test cases", () => {
         password,
         passwordConfirm,
       },
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(
       expect,
@@ -130,10 +116,7 @@ test.describe.serial("updatePassword test cases", () => {
         passwordCurrent,
         passwordConfirm,
       },
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(
       expect,
@@ -153,10 +136,7 @@ test.describe.serial("updatePassword test cases", () => {
         passwordCurrent,
         password,
       },
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(
       expect,
@@ -177,10 +157,7 @@ test.describe.serial("updatePassword test cases", () => {
         password: password + "1",
         passwordConfirm,
       },
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${data.token}`,
-      }
+      getHeadersWithToken(data.token)
     );
     await verifyResult(
       expect,
@@ -214,10 +191,7 @@ test.describe.serial("updatePassword test cases", () => {
       url,
       "PATCH",
       { passwordCurrent, password, passwordConfirm },
-      {
-        "Content-Type": "application/json",
-        Authorization: `Bearer wrong token`,
-      }
+      getHeadersWithToken("wrong token")
     );
     await verifyResult(expect, response, 500, "error", "jwt malformed");
   });

@@ -85,10 +85,7 @@ export async function createCharacter(token, name, model, instructions) {
     `http://${process.env.HOST_DNS}:${process.env.PORT}/api/v1/characters`,
     {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+      headers: getHeadersWithToken(token),
       body: JSON.stringify({
         name,
         model,
@@ -98,4 +95,11 @@ export async function createCharacter(token, name, model, instructions) {
   );
 
   return await response.json();
+}
+
+export function getHeadersWithToken(token) {
+  return {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+  };
 }
