@@ -5,7 +5,7 @@ import { catchAsync } from "../utils/catchAsync.js";
 import { responseWithUser } from "../utils/responseWithUser.js";
 import { User } from "../models/userModel.js";
 
-const getUser = catchAsync(async (req, res) => {
+const getUser = catchAsync(async (req, res, next) => {
   let user = await User.findById(req.params?.id);
 
   if (!user) {

@@ -22,7 +22,7 @@ const characterSchema = new mongoose.Schema({
   instructions: {
     type: String,
     trim: true,
-    default: "I want you act as  a helpful assistant.",
+    default: "I want you act as a helpful assistant.",
     maxlength: [
       250,
       "The instructions must have less or equal then 250 characters",

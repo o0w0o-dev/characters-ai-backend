@@ -6,7 +6,7 @@ import { Character } from "./../models/characterModel.js";
 
 function filterCharacterInfo(character) {
   const { _id, name, model, instructions } = character;
-  return { id: _id, name, model, instructions };
+  return { id: _id.toString(), name, model, instructions };
 }
 
 const getAllCharacters = catchAsync(async (req, res) => {
@@ -48,6 +48,10 @@ const createCharacter = catchAsync(async (req, res) => {
 const updateCharacter = catchAsync(async (req, res, next) => {
   const id = req.params?.id;
   const { name, model, instructions } = req.body;
+
+  if (!name) {
+    return next(new AppError("Invalid Name", 400));
+  }
 
   // check if exist
   let character = await Character.findById(id);
