@@ -6,12 +6,14 @@ export async function getTestResponse(
   body = {},
   headers = { "Content-Type": "application/json" }
 ) {
-  const response = await fetch(url, {
-    method,
-    headers,
-    body: JSON.stringify(body),
-  });
-
+  const options =
+    method === "GET"
+      ? {
+          method,
+          headers,
+        }
+      : { method, headers, body: JSON.stringify(body) };
+  const response = await fetch(url, options);
   return response;
 }
 
