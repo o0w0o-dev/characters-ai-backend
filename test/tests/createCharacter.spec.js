@@ -18,7 +18,7 @@ const email = "createCharacter@o0w0o.com";
 const password = "12345678Abc";
 const passwordConfirm = "12345678Abc";
 const model = "Model_A";
-const instructions = "I want you act as  a helpful assistant.";
+const instructions = "I want you act as a helpful assistant.";
 const url = `http://${process.env.HOST_DNS}:${process.env.PORT}/api/v1/characters`;
 
 test.beforeAll(async () => {
@@ -42,7 +42,7 @@ test.describe.serial("createCharacter test cases", () => {
     );
     await verifyResult(expect, response, 201, "success");
 
-    // duplicate character
+    // duplicate operation
     const response2 = await getTestResponse(
       url,
       "POST",

@@ -2,8 +2,8 @@
 
 import { test, expect } from "@playwright/test";
 import {
-  exampleTest,
   createCharacter,
+  exampleTest,
   getHeadersWithToken,
   getTestResponse,
   init,
@@ -19,7 +19,7 @@ const email = "getCharacter@o0w0o.com";
 const password = "12345678Abc";
 const passwordConfirm = "12345678Abc";
 const model = "Model_A";
-const instructions = "I want you act as  a helpful assistant.";
+const instructions = "I want you act as a helpful assistant.";
 
 test.beforeAll(async () => {
   await init(email, password, passwordConfirm);
@@ -37,7 +37,9 @@ test.describe.serial("getCharacter test cases", () => {
       instructions
     );
     const response = await getTestResponse(
-      `http://${process.env.HOST_DNS}:${process.env.PORT}/api/v1/characters/${data2.data?.character?.id}`,
+      `http://${process.env.HOST_DNS}:${
+        process.env.PORT
+      }/api/v1/characters/${data2.data?.character?.id?.toString()}`,
       "GET",
       undefined,
       getHeadersWithToken(data.token)
@@ -53,7 +55,11 @@ test.describe.serial("getCharacter test cases", () => {
       model,
       instructions
     );
-    const wrongId = data2.data?.character?.id.split("").sort().join(""); // TODO: test invalid id format
+    const wrongId = data2.data?.character?.id
+      ?.toString()
+      .split("")
+      .sort()
+      .join(""); // TODO: test invalid id format
     const response = await getTestResponse(
       `http://${process.env.HOST_DNS}:${process.env.PORT}/api/v1/characters/${wrongId}`,
       "GET",
@@ -72,7 +78,9 @@ test.describe.serial("getCharacter test cases", () => {
       instructions
     );
     const response = await getTestResponse(
-      `http://${process.env.HOST_DNS}:${process.env.PORT}/api/v1/characters/${data2.data?.character?.id}`,
+      `http://${process.env.HOST_DNS}:${
+        process.env.PORT
+      }/api/v1/characters/${data2.data?.character?.id?.toString()}`,
       "GET",
       undefined,
       {
@@ -97,7 +105,9 @@ test.describe.serial("getCharacter test cases", () => {
       instructions
     );
     const response = await getTestResponse(
-      `http://${process.env.HOST_DNS}:${process.env.PORT}/api/v1/characters/${data2.data?.character?.id}`,
+      `http://${process.env.HOST_DNS}:${
+        process.env.PORT
+      }/api/v1/characters/${data2.data?.character?.id?.toString()}`,
       "GET",
       undefined,
       getHeadersWithToken("wrong token")

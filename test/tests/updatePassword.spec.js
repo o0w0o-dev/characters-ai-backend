@@ -37,7 +37,7 @@ test.describe.serial("updatePassword test cases", () => {
     );
     await verifyResult(expect, response, 200, "success");
 
-    // update password twice
+    // duplicate operation
     const response2 = await getTestResponse(
       url,
       "PATCH",

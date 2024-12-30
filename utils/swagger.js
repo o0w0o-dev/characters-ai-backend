@@ -431,7 +431,7 @@ const spec = {
           },
           instructions: {
             type: "string",
-            example: "I want you act as  a helpful assistant.",
+            example: "I want you act as a helpful assistant.",
           },
         },
       },
@@ -448,7 +448,7 @@ const spec = {
           },
           instructions: {
             type: "string",
-            example: "I want you act as  a helpful assistant.",
+            example: "I want you act as a helpful assistant.",
           },
         },
       },
