@@ -60,7 +60,7 @@ test.describe.serial("getUser test cases", () => {
 
   test("getUser with wrong id", async () => {
     const data = await login(email, password);
-    const wrongId = data.data?.user?.id.split("").sort().join("");
+    const wrongId = data.data?.user?.id.split("").sort().join(""); // TODO: test invalid id format
     const response = await getTestResponse(
       `http://${process.env.HOST_DNS}:${process.env.PORT}/api/v1/users/${wrongId}`,
       "GET",

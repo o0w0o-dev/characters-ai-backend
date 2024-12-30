@@ -24,7 +24,7 @@ test.beforeAll(async () => {
   await init(email, password, passwordConfirm);
 });
 
-test.describe("getCharacter test cases", () => {
+test.describe.serial("getCharacter test cases", () => {
   exampleTest(test, expect, BASE_URL);
 
   test("getCharacter", async ({}, testInfo) => {

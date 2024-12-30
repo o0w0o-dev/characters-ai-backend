@@ -23,10 +23,6 @@ test.beforeAll(async () => {
   await init(email, password, passwordConfirm);
 });
 
-test.beforeAll(async () => {
-  await init();
-});
-
 test.describe.serial("updatePassword test cases", () => {
   exampleTest(test, expect, BASE_URL);
 
