@@ -6,7 +6,7 @@ import { Character } from "./../models/characterModel.js";
 
 function filterCharacterInfo(character) {
   const { _id, name, model, instructions } = character;
-  return { id: _id, name, model, instructions };
+  return { id: _id.toString(), name, model, instructions };
 }
 
 const getAllCharacters = catchAsync(async (req, res) => {

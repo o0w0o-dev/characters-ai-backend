@@ -79,3 +79,23 @@ export async function login(email, password) {
 
   return await response.json();
 }
+
+export async function createCharacter(token, name, model, instructions) {
+  const response = await fetch(
+    `http://${process.env.HOST_DNS}:${process.env.PORT}/api/v1/characters`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name,
+        model,
+        instructions,
+      }),
+    }
+  );
+
+  return await response.json();
+}
