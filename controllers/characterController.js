@@ -49,6 +49,10 @@ const updateCharacter = catchAsync(async (req, res, next) => {
   const id = req.params?.id;
   const { name, model, instructions } = req.body;
 
+  if (!name) {
+    return next(new AppError("Invalid Name", 400));
+  }
+
   // check if exist
   let character = await Character.findById(id);
   character = character?.deleted_at ? undefined : character;
