@@ -2,9 +2,9 @@
 
 import { test, expect } from "@playwright/test";
 import {
+  exampleTest,
   getTestResponse,
   verifyResult,
-  exampleTest,
 } from "./../../utils/testHelper.js";
 import dotenv from "dotenv";
 

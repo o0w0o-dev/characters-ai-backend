@@ -2,9 +2,10 @@
 
 import { test, expect } from "@playwright/test";
 import {
-  getTestResponse,
-  verifyResult,
   exampleTest,
+  getTestResponse,
+  init,
+  verifyResult,
 } from "./../../utils/testHelper.js";
 import dotenv from "dotenv";
 
@@ -16,17 +17,12 @@ const password = "12345678Abc";
 const passwordConfirm = "12345678Abc";
 const url = `${BASE_URL}/api/v1/users/login`;
 
+test.beforeAll(async () => {
+  await init(email, password, passwordConfirm);
+});
+
 test.describe.serial("login test cases", () => {
   exampleTest(test, expect, BASE_URL);
-
-  test("init", async () => {
-    const response = await getTestResponse(
-      `${BASE_URL}/api/v1/users/signup`,
-      "POST",
-      { email, password, passwordConfirm }
-    );
-    await verifyResult(expect, response, 201, "success");
-  });
 
   test("login", async () => {
     const response = await getTestResponse(url, "POST", { email, password });

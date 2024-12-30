@@ -2,9 +2,11 @@
 
 import { test, expect } from "@playwright/test";
 import {
-  getTestResponse,
-  verifyResult,
   exampleTest,
+  getTestResponse,
+  init,
+  login,
+  verifyResult,
 } from "./../../utils/testHelper.js";
 import dotenv from "dotenv";
 
@@ -16,42 +18,10 @@ const passwordCurrent = "12345678Abc";
 const password = "12345678Abc";
 const passwordConfirm = "12345678Abc";
 const url = `${BASE_URL}/api/v1/users/updatePassword`;
-let headers;
 
-async function init() {
-  await fetch(
-    `http://${process.env.HOST_DNS}:${process.env.PORT}/api/v1/users/signup`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email,
-        password,
-        passwordConfirm,
-      }),
-    }
-  );
-}
-
-async function createHeaders() {
-  const response = await fetch(
-    `http://${process.env.HOST_DNS}:${process.env.PORT}/api/v1/users/login`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    }
-  );
-
-  const data = await response.json();
-  return {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${data.token}`,
-  };
-}
+test.beforeAll(async () => {
+  await init(email, password, passwordConfirm);
+});
 
 test.beforeAll(async () => {
   await init();
@@ -61,12 +31,15 @@ test.describe.serial("updatePassword test cases", () => {
   exampleTest(test, expect, BASE_URL);
 
   test("updatePassword", async () => {
-    const headers = await createHeaders();
+    const data = await login(email, password);
     const response = await getTestResponse(
       url,
       "PATCH",
       { passwordCurrent, password, passwordConfirm },
-      headers
+      {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${data.token}`,
+      }
     );
     await verifyResult(expect, response, 200, "success");
 
@@ -75,7 +48,10 @@ test.describe.serial("updatePassword test cases", () => {
       url,
       "PATCH",
       { passwordCurrent, password, passwordConfirm },
-      headers
+      {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${data.token}`,
+      }
     );
     await verifyResult(
       expect,
@@ -87,12 +63,15 @@ test.describe.serial("updatePassword test cases", () => {
   });
 
   test("updatePassword with wrong current password", async () => {
-    const headers = await createHeaders();
+    const data = await login(email, password);
     const response = await getTestResponse(
       url,
       "PATCH",
       { passwordCurrent: passwordCurrent + "1", password, passwordConfirm },
-      headers
+      {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${data.token}`,
+      }
     );
     await verifyResult(
       expect,
@@ -104,8 +83,16 @@ test.describe.serial("updatePassword test cases", () => {
   });
 
   test("updatePassword with empty body", async () => {
-    const headers = await createHeaders();
-    const response = await getTestResponse(url, "PATCH", {}, headers);
+    const data = await login(email, password);
+    const response = await getTestResponse(
+      url,
+      "PATCH",
+      {},
+      {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${data.token}`,
+      }
+    );
     await verifyResult(
       expect,
       response,
@@ -116,7 +103,7 @@ test.describe.serial("updatePassword test cases", () => {
   });
 
   test("updatePassword without passwordCurrent", async () => {
-    const headers = await createHeaders();
+    const data = await login(email, password);
     const response = await getTestResponse(
       url,
       "PATCH",
@@ -124,7 +111,10 @@ test.describe.serial("updatePassword test cases", () => {
         password,
         passwordConfirm,
       },
-      headers
+      {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${data.token}`,
+      }
     );
     await verifyResult(
       expect,
@@ -136,7 +126,7 @@ test.describe.serial("updatePassword test cases", () => {
   });
 
   test("updatePassword without password", async () => {
-    const headers = await createHeaders();
+    const data = await login(email, password);
     const response = await getTestResponse(
       url,
       "PATCH",
@@ -144,7 +134,10 @@ test.describe.serial("updatePassword test cases", () => {
         passwordCurrent,
         passwordConfirm,
       },
-      headers
+      {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${data.token}`,
+      }
     );
     await verifyResult(
       expect,
@@ -156,7 +149,7 @@ test.describe.serial("updatePassword test cases", () => {
   });
 
   test("updatePassword without passwordConfirm", async () => {
-    const headers = await createHeaders();
+    const data = await login(email, password);
     const response = await getTestResponse(
       url,
       "PATCH",
@@ -164,7 +157,10 @@ test.describe.serial("updatePassword test cases", () => {
         passwordCurrent,
         password,
       },
-      headers
+      {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${data.token}`,
+      }
     );
     await verifyResult(
       expect,
@@ -176,7 +172,7 @@ test.describe.serial("updatePassword test cases", () => {
   });
 
   test("updatePassword with wrong password", async () => {
-    const headers = await createHeaders();
+    const data = await login(email, password);
     const response = await getTestResponse(
       url,
       "PATCH",
@@ -185,7 +181,10 @@ test.describe.serial("updatePassword test cases", () => {
         password: password + "1",
         passwordConfirm,
       },
-      headers
+      {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${data.token}`,
+      }
     );
     await verifyResult(
       expect,

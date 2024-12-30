@@ -1,5 +1,8 @@
 "use strict";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 export async function getTestResponse(
   url,
   method,
@@ -44,4 +47,35 @@ export async function exampleTest(test, expect, url) {
     const data = await response.json();
     expect(data).toEqual({ root: true });
   });
+}
+
+export async function init(email, password, passwordConfirm) {
+  await fetch(
+    `http://${process.env.HOST_DNS}:${process.env.PORT}/api/v1/users/signup`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email,
+        password,
+        passwordConfirm,
+      }),
+    }
+  );
+}
+
+export async function login(email, password) {
+  const response = await fetch(
+    `http://${process.env.HOST_DNS}:${process.env.PORT}/api/v1/users/login`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    }
+  );
+
+  return await response.json();
 }
