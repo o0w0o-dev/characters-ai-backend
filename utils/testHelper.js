@@ -10,7 +10,7 @@ export async function getTestResponse(
   headers = { "Content-Type": "application/json" }
 ) {
   const options =
-    method === "GET"
+    method === "GET" || method === "DELETE"
       ? {
           method,
           headers,
@@ -29,6 +29,7 @@ export async function verifyResult(
 ) {
   expect(response.status).toBe(expectedStatusCode);
 
+  if (expectedStatusCode === 204) return;
   const data = await response.json();
   expect(data.status).toEqual(expectedStatus);
   if (expectedMessage) expect(data.message).toEqual(expectedMessage);
