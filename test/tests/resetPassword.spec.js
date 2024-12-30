@@ -9,7 +9,6 @@ const BASE_URL = `http://${process.env.HOST_DNS}:${process.env.PORT}`;
 const password = "12345678Abc";
 const passwordConfirm = "12345678Abc";
 
-// TODO: test manually
 test.describe.serial("resetPassword test cases", () => {
   test("example test", async () => {
     const url = BASE_URL;
@@ -40,6 +39,21 @@ test.describe.serial("resetPassword test cases", () => {
     expect(data.message).toEqual(
       "Cannot find /api/v1/users/resetPassword/ on this server."
     );
+  });
+
+  test("resetPassword with invalid token", async () => {
+    const token = "fakeToken";
+    const url = `${BASE_URL}/api/v1/users/resetPassword/${token}`;
+    const headers = { "Content-Type": "application/json" };
+    const body = JSON.stringify({ password, passwordConfirm });
+    const method = "PATCH";
+
+    const response = await fetch(url, { method, headers, body });
+    expect(response.status).toBe(400);
+
+    const data = await response.json();
+    expect(data.status).toEqual("fail");
+    expect(data.message).toEqual("Token is invalid or has expired");
   });
 
   test("resetPassword with empty body", async () => {
@@ -100,5 +114,22 @@ test.describe.serial("resetPassword test cases", () => {
     const data = await response.json();
     expect(data.status).toEqual("fail");
     expect(data.message).toEqual("Please provide valid password");
+  });
+
+  // TODO: manual test cases
+  test("resetPassword", async () => {
+    const token = process.env.TEST_RESET_TOKEN;
+    test.skip(!token); // skip test if no token provided
+
+    const url = `${BASE_URL}/api/v1/users/resetPassword/${token}`;
+    const headers = { "Content-Type": "application/json" };
+    const body = JSON.stringify({ password, passwordConfirm });
+    const method = "PATCH";
+
+    const response = await fetch(url, { method, headers, body });
+    expect(response.status).toBe(200);
+
+    const data = await response.json();
+    expect(data.status).toEqual("success");
   });
 });
