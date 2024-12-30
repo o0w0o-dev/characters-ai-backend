@@ -11,7 +11,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const BASE_URL = `http://${process.env.HOST_DNS}:${process.env.PORT}`;
-const email = "test789@o0w0o.com";
+const email = "forgotPassword@o0w0o.com";
 const password = "12345678Abc";
 const passwordConfirm = "12345678Abc";
 const url = `${BASE_URL}/api/v1/users/forgotPassword`;
