@@ -107,7 +107,7 @@ test.describe.serial("resetPassword test cases", () => {
   // TODO: manual test cases
   test("resetPassword", async () => {
     const token = process.env.TEST_RESET_TOKEN;
-    test.skip(!token); // skip test if no token provided
+    test.skip(!token, "skip test if no token provided");
 
     const url = `${BASE_URL}/api/v1/users/resetPassword/${token}`;
     const response = await getTestResponse(url, "PATCH", {
