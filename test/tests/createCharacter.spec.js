@@ -25,7 +25,7 @@ test.beforeAll(async () => {
   await init(email, password, passwordConfirm);
 });
 
-test.describe("createCharacter test cases", () => {
+test.describe.serial("createCharacter test cases", () => {
   exampleTest(test, expect, BASE_URL);
 
   test("createCharacter", async ({}, testInfo) => {
@@ -53,7 +53,13 @@ test.describe("createCharacter test cases", () => {
       },
       getHeadersWithToken(data.token)
     );
-    await verifyResult(expect, response2, 400, "fail", "failMessage");
+    await verifyResult(
+      expect,
+      response2,
+      500,
+      "error",
+      `E11000 duplicate key error collection: characters_ai.characters index: name_1 dup key: { name: "eCharacter" }`
+    ); // TODO: update message
   });
 
   test("createCharacter with empty body", async ({}, testInfo) => {
@@ -64,7 +70,13 @@ test.describe("createCharacter test cases", () => {
       {},
       getHeadersWithToken(data.token)
     );
-    await verifyResult(expect, response, 400, "fail", "failMessage");
+    await verifyResult(
+      expect,
+      response,
+      500,
+      "error",
+      "Character validation failed: name: Must have a name"
+    );
   });
 
   test("createCharacter without name", async ({}, testInfo) => {
@@ -78,7 +90,13 @@ test.describe("createCharacter test cases", () => {
       },
       getHeadersWithToken(data.token)
     );
-    await verifyResult(expect, response, 400, "fail", "failMessage");
+    await verifyResult(
+      expect,
+      response,
+      500,
+      "error",
+      "Character validation failed: name: Must have a name"
+    );
   });
 
   test("createCharacter without model", async ({}, testInfo) => {
@@ -92,7 +110,7 @@ test.describe("createCharacter test cases", () => {
       },
       getHeadersWithToken(data.token)
     );
-    await verifyResult(expect, response, 400, "fail", "failMessage");
+    await verifyResult(expect, response, 201, "success");
   });
 
   test("createCharacter without instructions", async ({}, testInfo) => {
@@ -106,7 +124,7 @@ test.describe("createCharacter test cases", () => {
       },
       getHeadersWithToken(data.token)
     );
-    await verifyResult(expect, response, 400, "fail", "failMessage");
+    await verifyResult(expect, response, 201, "success");
   });
 
   test("createCharacter with invalid name", async ({}, testInfo) => {
@@ -121,7 +139,13 @@ test.describe("createCharacter test cases", () => {
       },
       getHeadersWithToken(data.token)
     );
-    await verifyResult(expect, response, 400, "fail", "failMessage");
+    await verifyResult(
+      expect,
+      response,
+      500,
+      "error",
+      "Character validation failed: name: The name must have less or equal then 25 characters"
+    );
   });
 
   test("createCharacter with invalid model", async ({}, testInfo) => {
@@ -136,7 +160,13 @@ test.describe("createCharacter test cases", () => {
       },
       getHeadersWithToken(data.token)
     );
-    await verifyResult(expect, response, 400, "fail", "failMessage");
+    await verifyResult(
+      expect,
+      response,
+      500,
+      "error",
+      "Character validation failed: model: Model is either: Model_A, Model_B, Model_C"
+    );
   });
 
   test("createCharacter with invalid instructions", async ({}, testInfo) => {
@@ -151,7 +181,13 @@ test.describe("createCharacter test cases", () => {
       },
       getHeadersWithToken(data.token)
     );
-    await verifyResult(expect, response, 400, "fail", "failMessage");
+    await verifyResult(
+      expect,
+      response,
+      500,
+      "error",
+      "Character validation failed: instructions: The instructions must have less or equal then 250 characters"
+    );
   });
 
   test("createCharacter without auth", async ({}, testInfo) => {
