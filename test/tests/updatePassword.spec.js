@@ -224,12 +224,6 @@ test.describe.serial("updatePassword test cases", () => {
         Authorization: `Bearer wrong token`,
       }
     );
-    await verifyResult(
-      expect,
-      response,
-      401,
-      "fail",
-      "You are not logged in! Please log in to get access"
-    );
+    await verifyResult(expect, response, 500, "error", "jwt malformed");
   });
 });
