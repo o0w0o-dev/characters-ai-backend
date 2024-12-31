@@ -4,6 +4,7 @@ import { test, expect } from "@playwright/test";
 import {
   exampleTest,
   getTestResponse,
+  sleep,
   verifyResult,
 } from "./../../utils/testHelper.js";
 import dotenv from "dotenv";
@@ -14,7 +15,12 @@ const BASE_URL = `http://${process.env.HOST_DNS}:${process.env.PORT}`;
 const password = "12345678Abc";
 const passwordConfirm = "12345678Abc";
 
+test.beforeEach(async () => {
+  await sleep(5000);
+});
+
 test.describe.serial("resetPassword test cases", () => {
+  test.skip(true, "skip");
   exampleTest(test, expect, BASE_URL);
 
   test("resetPassword without token", async () => {

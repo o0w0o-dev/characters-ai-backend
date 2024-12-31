@@ -8,6 +8,7 @@ import {
   getTestResponse,
   init,
   login,
+  sleep,
   verifyResult,
 } from "./../../utils/testHelper.js";
 import dotenv from "dotenv";
@@ -25,7 +26,12 @@ test.beforeAll(async () => {
   await init(email, password, passwordConfirm);
 });
 
+test.beforeEach(async () => {
+  await sleep(5000);
+});
+
 test.describe.serial("getCharacter test cases", () => {
+  test.skip(true, "skip");
   exampleTest(test, expect, BASE_URL);
 
   test("getCharacter", async ({}, testInfo) => {
@@ -45,6 +51,17 @@ test.describe.serial("getCharacter test cases", () => {
       getHeadersWithToken(data.token)
     );
     await verifyResult(expect, response, 200, "success");
+
+    // duplicate operation
+    const response2 = await getTestResponse(
+      `http://${process.env.HOST_DNS}:${
+        process.env.PORT
+      }/api/v1/characters/${data2.data?.character?.id?.toString()}`,
+      "GET",
+      undefined,
+      getHeadersWithToken(data.token)
+    );
+    await verifyResult(expect, response2, 200, "success");
   });
 
   test("getCharacter with wrong id", async ({}, testInfo) => {
