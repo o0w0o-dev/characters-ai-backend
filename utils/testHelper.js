@@ -104,3 +104,5 @@ export function getHeadersWithToken(token) {
     Authorization: `Bearer ${token}`,
   };
 }
+
+export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

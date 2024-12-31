@@ -4,6 +4,7 @@ import { test, expect } from "@playwright/test";
 import {
   exampleTest,
   getTestResponse,
+  sleep,
   verifyResult,
 } from "./../../utils/testHelper.js";
 import dotenv from "dotenv";
@@ -16,7 +17,12 @@ const password = "12345678Abc";
 const passwordConfirm = "12345678Abc";
 const url = `${BASE_URL}/api/v1/users/signup`;
 
+test.beforeEach(async () => {
+  await sleep(5000);
+});
+
 test.describe.serial("signup test cases", () => {
+  test.skip(false, "skip");
   exampleTest(test, expect, BASE_URL);
 
   test("signup", async () => {

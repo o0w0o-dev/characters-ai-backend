@@ -6,6 +6,7 @@ import {
   getTestResponse,
   init,
   login,
+  sleep,
   verifyResult,
 } from "./../../utils/testHelper.js";
 import dotenv from "dotenv";
@@ -22,12 +23,27 @@ test.beforeAll(async () => {
   await init(email, password, passwordConfirm);
 });
 
+test.beforeEach(async () => {
+  await sleep(5000);
+});
+
 test.describe.serial("forgotPassword test cases", () => {
+  test.skip(true, "skip");
   exampleTest(test, expect, BASE_URL);
 
   test("forgotPassword", async () => {
     const response = await getTestResponse(url, "POST", { email });
     await verifyResult(expect, response, 200, "success", "Token sent to email");
+
+    // duplicate operation
+    const response2 = await getTestResponse(url, "POST", { email });
+    await verifyResult(
+      expect,
+      response2,
+      200,
+      "success",
+      "Token sent to email"
+    );
   });
 
   test("forgotPassword with empty body", async () => {

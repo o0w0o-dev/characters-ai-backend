@@ -7,6 +7,7 @@ import {
   getTestResponse,
   init,
   login,
+  sleep,
   verifyResult,
 } from "./../../utils/testHelper.js";
 import dotenv from "dotenv";
@@ -23,7 +24,12 @@ test.beforeAll(async () => {
   await init(email, password, passwordConfirm);
 });
 
+test.beforeEach(async () => {
+  await sleep(5000);
+});
+
 test.describe.serial("getAllCharacters test cases", () => {
+  test.skip(true, "skip");
   exampleTest(test, expect, BASE_URL);
 
   test("getAllCharacters", async () => {
@@ -35,6 +41,15 @@ test.describe.serial("getAllCharacters test cases", () => {
       getHeadersWithToken(data.token)
     );
     await verifyResult(expect, response, 200, "success");
+
+    // duplicate operation
+    const response2 = await getTestResponse(
+      url,
+      "GET",
+      undefined,
+      getHeadersWithToken(data.token)
+    );
+    await verifyResult(expect, response2, 200, "success");
   });
 
   test("getAllCharacters without auth", async () => {

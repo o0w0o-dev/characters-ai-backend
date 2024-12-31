@@ -8,6 +8,7 @@ import {
   getTestResponse,
   init,
   login,
+  sleep,
   verifyResult,
 } from "./../../utils/testHelper.js";
 import dotenv from "dotenv";
@@ -26,7 +27,12 @@ test.beforeAll(async () => {
   await init(email, password, passwordConfirm);
 });
 
+test.beforeEach(async () => {
+  await sleep(5000);
+});
+
 test.describe.serial("updateCharacter test cases", () => {
+  test.skip(false, "skip");
   exampleTest(test, expect, BASE_URL);
 
   test("updateCharacter", async ({}, testInfo) => {
