@@ -37,7 +37,7 @@ else
 fi
 
 export CONTAINER_NAME=$CONTAINER_NAME
-export AWS_PROFILE=characters_developer
+export AWS_PROFILE=characters_maintainer
 
 sops --decrypt --encryption-context Role:characters-development-sops-role ./ansible/$ENV/secrets.enc.env > .env
 cp ./ansible/$ENV/Dockerfile.$ENV Dockerfile
