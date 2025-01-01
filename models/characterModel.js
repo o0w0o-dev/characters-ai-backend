@@ -37,11 +37,10 @@ const characterSchema = new mongoose.Schema({
     trim: true,
     default: "https://uploads.dailydot.com/2018/10/olli-the-polite-cat.jpg", // TODO: remove dev data
   },
-  //   userId: {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: 'User',
-  //     required: [true, "Must belong to a user"] // TODO: add user id
-  //   },
+  userId: {
+    type: String,
+    required: [true, "Must belong to a user"],
+  },
   created_at: {
     type: Date,
     default: Date.now(),
