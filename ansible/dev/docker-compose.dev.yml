@@ -6,11 +6,17 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: characters-ai-dev-backend
-    ports:
-      - 8000:8000
+    expose:
+      - 8000
     restart: unless-stopped
     logging:
       driver: json-file
       options:
         max-size: "10m"
         max-file: "3"
+    networks:
+      - characters-network
+
+networks:
+  characters-network:
+    external: true
