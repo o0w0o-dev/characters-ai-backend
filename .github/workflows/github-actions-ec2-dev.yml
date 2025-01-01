@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Deploy to Dev EC2
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
         uses: easingthemes/ssh-deploy@main # predefined action name
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+          REMOTE_HOST: ${{ secrets.DEV_HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
 
@@ -30,4 +30,4 @@ jobs:
       - name: Run Bash Script on EC2
         #TODO: remove hardcoded path
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST_DNS }} 'bash /home/ec2-user/apps/characters-ai-backend/deploy_local.sh dev'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.DEV_HOST_DNS }} 'bash ${{ secrets.TARGET_DIR }}/deploy_local.sh dev'

@@ -1,0 +1,33 @@
+name: Deploy to Prod EC2
+
+on:
+  push:
+    branches:
+      - prod
+
+jobs:
+  deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2 # predefined action name
+
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@main # predefined action name
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.PROD_HOST_DNS }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          TARGET: ${{ secrets.TARGET_DIR }}
+
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Run Bash Script on EC2
+        #TODO: remove hardcoded path
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.PROD_HOST_DNS }} 'bash ${{ secrets.TARGET_DIR }}/deploy_local.sh prod'
