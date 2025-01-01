@@ -13,11 +13,12 @@ import { router as characterRouter } from "./routes/characterRoutes.js";
 import { router as userRouter } from "./routes/userRoutes.js";
 import swaggerDocs from "./utils/swagger.js";
 
+dotenv.config();
+
 const PORT = process.env.PORT || 8000;
 const RATE_LIMIT = process.env.RATE_LIMIT * 1 || 100;
 
 const app = express();
-dotenv.config();
 
 app.use(helmet());
 
