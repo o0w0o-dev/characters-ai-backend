@@ -11,7 +11,16 @@ const spec = {
   },
   servers: [
     {
+      url: "https://o0w0o.com/api/v1",
+    },
+    {
+      url: "https://www.o0w0o.com/api/v1",
+    },
+    {
       url: "http://localhost:8000/api/v1",
+    },
+    {
+      url: "http://localhost:9000/api/v1",
     },
   ],
   tags: [
