@@ -10,7 +10,9 @@ function filterCharacterInfo(character) {
 }
 
 const getAllCharacters = catchAsync(async (req, res) => {
-  let characters = await Character.find().sort("-updated_at -created_at");
+  let characters = await Character.find({ userId: req.user._id }).sort(
+    "-updated_at -created_at"
+  );
   characters = characters.filter((character) => !character.deleted_at);
   characters = characters.map((character) => filterCharacterInfo(character));
 
@@ -22,7 +24,10 @@ const getAllCharacters = catchAsync(async (req, res) => {
 });
 
 const getCharacter = catchAsync(async (req, res, next) => {
-  let character = await Character.findById(req.params?.id);
+  let character = await Character.findOne({
+    _id: req.params?.id,
+    userId: req.user._id,
+  });
   character = character?.deleted_at ? undefined : character;
 
   if (!character) {
@@ -37,7 +42,13 @@ const getCharacter = catchAsync(async (req, res, next) => {
 
 const createCharacter = catchAsync(async (req, res) => {
   const { name, model, instructions } = req.body;
-  const character = await Character.create({ name, model, instructions });
+  const userId = req.user._id;
+  const character = await Character.create({
+    name,
+    model,
+    instructions,
+    userId,
+  });
 
   res.status(201).json({
     status: "success",
@@ -54,7 +65,10 @@ const updateCharacter = catchAsync(async (req, res, next) => {
   }
 
   // check if exist
-  let character = await Character.findById(id);
+  let character = await Character.findOne({
+    _id: req.params?.id,
+    userId: req.user._id,
+  });
   character = character?.deleted_at ? undefined : character;
   if (!character) {
     return next(new AppError("Invalid ID", 404));
@@ -83,7 +97,10 @@ const deleteCharacter = catchAsync(async (req, res, next) => {
   const id = req.params?.id;
 
   // check if exist
-  let character = await Character.findById(id);
+  let character = await Character.findOne({
+    _id: req.params?.id,
+    userId: req.user._id,
+  });
   character = character?.deleted_at ? undefined : character;
   if (!character) {
     return next(new AppError("Invalid ID", 404));
