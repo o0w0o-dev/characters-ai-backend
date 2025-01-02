@@ -6,7 +6,6 @@ const characterSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Must have a name"],
-    unique: true,
     trim: true,
     maxlength: [25, "The name must have less or equal then 25 characters"],
     minlength: [4, "The name must have more or equal then 4 characters"],

@@ -109,7 +109,6 @@ const deleteCharacter = catchAsync(async (req, res, next) => {
   character = await Character.findByIdAndUpdate(
     req.params.id,
     {
-      name: `${character._id.toString()}`,
       deleted_at: Date.now(),
     },
     {
