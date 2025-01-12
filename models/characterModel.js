@@ -12,11 +12,13 @@ const characterSchema = new mongoose.Schema({
   },
   model: {
     type: String,
-    default: "Model_A",
-    enum: {
-      values: ["Model_A", "Model_B", "Model_C"], // TODO: remove dev data
-      message: "Model is either: Model_A, Model_B, Model_C",
-    },
+    required: [true, "Must have a model ID"],
+    trim: true,
+    maxlength: [
+      100,
+      "The model ID must have less or equal then 100 characters",
+    ],
+    minlength: [1, "The model ID must have more or equal then 1 characters"],
   },
   instructions: {
     type: String,
@@ -34,7 +36,7 @@ const characterSchema = new mongoose.Schema({
   avatar: {
     type: String,
     trim: true,
-    default: "https://uploads.dailydot.com/2018/10/olli-the-polite-cat.jpg", // TODO: remove dev data
+    default: "https://s3.us-east-1.amazonaws.com/o0w0o.com/cat.jpg", // TODO: remove dev data
   },
   userId: {
     type: String,
