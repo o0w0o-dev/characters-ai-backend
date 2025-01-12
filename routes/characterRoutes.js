@@ -7,6 +7,7 @@ import {
   createCharacter,
   updateCharacter,
   deleteCharacter,
+  chat,
 } from "../controllers/characterController.js";
 import { protect } from "../controllers/authController.js";
 
@@ -20,5 +21,6 @@ router
   .get(getCharacter)
   .put(updateCharacter)
   .delete(deleteCharacter);
+router.route("/:id/chat").post(chat);
 
 export { router };
