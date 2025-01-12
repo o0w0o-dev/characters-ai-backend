@@ -19,7 +19,7 @@ const BASE_URL = `http://${process.env.HOST_DNS}:${process.env.PORT}`;
 const email = "deleteCharacter@o0w0o.com";
 const password = "12345678Abc";
 const passwordConfirm = "12345678Abc";
-const model = "Model_A";
+const model = "meta-llama/Llama-3.1-8B-Instruct";
 const instructions = "I want you act as a helpful assistant.";
 const url = `http://${process.env.HOST_DNS}:${process.env.PORT}/api/v1/characters/`;
 
