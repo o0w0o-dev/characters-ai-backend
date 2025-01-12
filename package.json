@@ -10,6 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@huggingface/inference": "^2.8.1",
+    "@langchain/community": "^0.3.24",
+    "@langchain/core": "^0.3.29",
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",

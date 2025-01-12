@@ -3,6 +3,7 @@
 import { AppError } from "../utils/appError.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import { Character } from "./../models/characterModel.js";
+import { Agent } from "../utils/agent.js";
 
 function filterCharacterInfo(character) {
   const { _id, name, model, instructions } = character;
@@ -127,10 +128,36 @@ const deleteCharacter = catchAsync(async (req, res, next) => {
   });
 });
 
+const chat = catchAsync(async (req, res, next) => {
+  let character = await Character.findOne({
+    _id: req.params?.id,
+    userId: req.user._id,
+  });
+  character = character?.deleted_at ? undefined : character;
+
+  if (!character) {
+    return next(new AppError("Invalid ID", 404));
+  }
+
+  const { id, name, model, instructions } = character;
+  const { prompt, fileUrl } = req.body;
+  const agent = new Agent(id, name, model, instructions);
+
+  console.log({ id, name, model, instructions, prompt, fileUrl });
+
+  const message = await agent.chat(prompt, fileUrl);
+
+  res.status(200).json({
+    status: "success",
+    data: { message: message },
+  });
+});
+
 export {
   getAllCharacters,
   getCharacter,
   createCharacter,
   updateCharacter,
   deleteCharacter,
+  chat,
 };

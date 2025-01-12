@@ -14,7 +14,7 @@ const spec = {
       url: "https://www.o0w0o.com/api/v1",
     },
     {
-      url: "http://localhost/api/v1",
+      url: "http://localhost:8000/api/v1",
     },
   ],
   tags: [
@@ -349,6 +349,49 @@ const spec = {
         },
       },
     },
+    "/characters/{id}/chat": {
+      post: {
+        tags: ["characters"],
+        summary: "Chat with character",
+        security: [{ bearerAuth: [] }],
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            description: "Characters ID",
+            required: true,
+            schema: {
+              type: "string",
+            },
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/chatWithCharacter",
+              },
+            },
+            "application/xml": {
+              schema: {
+                $ref: "#/components/schemas/chatWithCharacter",
+              },
+            },
+            "application/x-www-form-urlencoded": {
+              schema: {
+                $ref: "#/components/schemas/chatWithCharacter",
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+        },
+      },
+    },
   },
   components: {
     schemas: {
@@ -430,7 +473,7 @@ const spec = {
           },
           model: {
             type: "string",
-            example: "Model_A",
+            example: "meta-llama/Llama-3.1-8B-Instruct",
           },
           instructions: {
             type: "string",
@@ -447,11 +490,24 @@ const spec = {
           },
           model: {
             type: "string",
-            example: "Model_A",
+            example: "meta-llama/Llama-3.1-8B-Instruct",
           },
           instructions: {
             type: "string",
             example: "I want you act as a helpful assistant.",
+          },
+        },
+      },
+      chatWithCharacter: {
+        type: "object",
+        properties: {
+          prompt: {
+            type: "string",
+            example: "Hello, what is your name?",
+          },
+          fileUrl: {
+            type: "string",
+            example: "https://s3.us-east-1.amazonaws.com/o0w0o.com/cat.jpg",
           },
         },
       },
